@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:id="@+id/login_swipeRefresh"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/login_textView"
+            style="@style/LargeTitleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sign_in"
+            app:layout_constraintBottom_toTopOf="@id/topLogin_guideline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/email_InputLayout"
+            style="@style/TextLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_16"
+            android:hint="@string/register_hint_email"
+            app:layout_constraintEnd_toEndOf="@id/loginEnd_guideline"
+            app:layout_constraintStart_toStartOf="@id/loginBegin_guideline"
+            app:layout_constraintTop_toBottomOf="@id/login_textView">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/email_inputText"
+                style="@style/InputText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/password_InputLayout"
+            style="@style/TextLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/register_hint_password"
+            app:layout_constraintEnd_toEndOf="@id/loginEnd_guideline"
+            app:layout_constraintStart_toStartOf="@id/loginBegin_guideline"
+            app:layout_constraintTop_toBottomOf="@id/email_InputLayout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/password_inputText"
+                style="@style/InputText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/login_button"
+            style="@style/WhiteButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_8"
+            android:text="@string/log_in"
+            android:textAllCaps="true"
+            app:layout_constraintEnd_toEndOf="@id/loginEnd_guideline"
+            app:layout_constraintStart_toStartOf="@id/loginBegin_guideline"
+            app:layout_constraintTop_toBottomOf="@id/password_InputLayout" />
+
+        <TextView
+            android:id="@+id/forgotPassword_textView"
+            style="@style/UnderlinedLargeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_8"
+            android:text="@string/forgot_password"
+            app:layout_constraintEnd_toEndOf="@id/loginEnd_guideline"
+            app:layout_constraintStart_toStartOf="@id/loginBegin_guideline"
+            app:layout_constraintTop_toBottomOf="@id/login_button" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/topLogin_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.4" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/loginBegin_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="@dimen/size_64" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/loginEnd_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="@dimen/size_64" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

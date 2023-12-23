@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.SnipeAGame.SplashScreen" parent="Theme.SplashScreen">
+        <item name="postSplashScreenTheme">@style/Theme.SnipeAGame</item>
+        <item name="android:windowSplashScreenBackground">@color/white</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/splash_inset</item>
+        <item name="android:animationDuration">3000</item>
+    </style>
+</resources>

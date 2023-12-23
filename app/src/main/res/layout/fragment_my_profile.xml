@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipeRefresh"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/myProfile"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/profile_topHorizontalGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.07" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/profile_top_background"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@id/profile_horizontalGuideline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/profile_topHorizontalGuideline">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/profile_cardView"
+                android:layout_width="@dimen/size_100"
+                android:layout_height="@dimen/size_104"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/size_8"
+                app:cardBackgroundColor="@android:color/transparent"
+                app:cardCornerRadius="@dimen/size_100"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/my_profile"
+                    android:src="@drawable/profile_image" />
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/fullName_textView"
+                style="@style/ProfileTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                tools:text="@string/full_name" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/profile_white_background"
+            android:elevation="@dimen/size_8"
+            app:layout_constraintBottom_toBottomOf="@id/profile_bottomGuideline"
+            app:layout_constraintEnd_toEndOf="@id/profile_endGuideline"
+            app:layout_constraintStart_toStartOf="@id/profile_startGuideline"
+            app:layout_constraintTop_toBottomOf="@id/profile_topGuideline">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/profile_middleVerticalGuideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.5" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/profile_innerHorizontalGuideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_percent="0.45" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/profile_innerStartGuideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.05" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/profile_innerEndGuideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.95" />
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="@dimen/size_100"
+                    android:layout_height="@dimen/size_130"
+                    android:layout_marginTop="@dimen/size_8"
+                    android:background="@drawable/grey_background"
+                    android:elevation="@dimen/size_1"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toStartOf="@id/profile_middleVerticalGuideline"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/profile_takedownsTextView"
+                        style="@style/ProfileText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:padding="@dimen/size_8"
+                        android:text="@string/takedowns" />
+
+                    <ImageView
+                        android:id="@+id/profile_takedownsImageView"
+                        android:layout_width="@dimen/size_64"
+                        android:layout_height="@dimen/size_64"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="@dimen/size_8"
+                        android:background="@drawable/oval_background"
+                        android:contentDescription="@string/my_profile"
+                        android:src="@drawable/takedowns" />
+
+                    <TextView
+                        android:id="@+id/takedowns_textView"
+                        style="@style/ProfileText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="@string/initial_number" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="@dimen/size_100"
+                    android:layout_height="@dimen/size_130"
+                    android:layout_marginTop="@dimen/size_8"
+                    android:background="@drawable/grey_background"
+                    android:elevation="@dimen/size_1"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/profile_middleVerticalGuideline"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/profile_gamesTextView"
+                        style="@style/ProfileText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:padding="@dimen/size_8"
+                        android:text="@string/games" />
+
+                    <ImageView
+                        android:id="@+id/profile_gamesImageView"
+                        android:layout_width="@dimen/size_64"
+                        android:layout_height="@dimen/size_64"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="@dimen/size_8"
+                        android:background="@drawable/oval_background"
+                        android:contentDescription="@string/games"
+                        android:src="@drawable/games" />
+
+                    <TextView
+                        android:id="@+id/games_textView"
+                        style="@style/ProfileText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="@string/initial_number" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <TextView
+                    android:id="@+id/firstRole_textView"
+                    style="@style/SmallTitleText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/size_8"
+                    android:layout_marginVertical="@dimen/size_16"
+                    android:text="@string/first_role"
+                    app:layout_constraintStart_toStartOf="@id/profile_innerStartGuideline"
+                    app:layout_constraintTop_toBottomOf="@id/profile_innerHorizontalGuideline" />
+
+                <TextView
+                    android:id="@+id/secondRole_textView"
+                    style="@style/SmallTitleText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/size_8"
+                    android:layout_marginVertical="@dimen/size_16"
+                    android:text="@string/second_role"
+                    app:layout_constraintStart_toStartOf="@id/profile_innerStartGuideline"
+                    app:layout_constraintTop_toBottomOf="@id/firstRole_textView" />
+
+                <TextView
+                    android:id="@+id/email_textView"
+                    style="@style/SmallTitleText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/size_8"
+                    android:layout_marginVertical="@dimen/size_16"
+                    android:text="@string/email_address"
+                    app:layout_constraintStart_toStartOf="@id/profile_innerStartGuideline"
+                    app:layout_constraintTop_toBottomOf="@id/secondRole_textView" />
+
+                <TextView
+                    android:id="@+id/phone_textView"
+                    style="@style/SmallTitleText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/size_8"
+                    android:layout_marginVertical="@dimen/size_16"
+                    android:text="@string/phone_number"
+                    app:layout_constraintStart_toStartOf="@id/profile_innerStartGuideline"
+                    app:layout_constraintTop_toBottomOf="@id/email_textView" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/profile_horizontalGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.35" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/profile_bottomGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.95" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/profile_topGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.32" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/profile_startGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="@dimen/size_40" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/profile_endGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="@dimen/size_40" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

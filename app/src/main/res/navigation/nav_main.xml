@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_main"
+    app:startDestination="@id/games_fragment">
+
+    <fragment
+        android:id="@+id/games_fragment"
+        android:name="com.example.snipeagame.ui.main.games.GamesFragment"
+        android:label="Games" />
+    <fragment
+        android:id="@+id/myProfile_fragment"
+        android:name="com.example.snipeagame.ui.main.profile.MyProfileFragment"
+        android:label="MyProfile" />
+    <fragment
+        android:id="@+id/achievements_fragment"
+        android:name="com.example.snipeagame.ui.main.achievements.AchievementsFragment"
+        android:label="Achievements" />
+    <fragment
+        android:id="@+id/availableAchievementsFragment"
+        android:name="com.example.snipeagame.ui.main.achievements.available.AvailableAchievementsFragment"
+        android:label="AvailableAchievementsFragment" />
+    <fragment
+        android:id="@+id/unlockedAchievementsFragment"
+        android:name="com.example.snipeagame.ui.main.achievements.unlocked.UnlockedAchievementsFragment"
+        android:label="UnlockedAchievementsFragment" />
+</navigation>

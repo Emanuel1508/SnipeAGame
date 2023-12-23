@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="inactive">#6D121212</color>
+    <color name="stroke_dark_green">#344e41</color>
+    <color name="unfocused_white">#fefae0</color>
+    <color name="theme_green">#606c38</color>
+    <color name="pale_green">#F0FEF3</color>
+    <color name="unfocused">#F8F8F8</color>
+    <color name="grey">#5F5F5F</color>
+    <color name="red">#FF0000</color>
+    <color name="info_card_green">#F8FFFA</color>
+    <color name="selected_green">#E0FFE7</color>
+    <color name="light_gray">#F1F1F1</color>
+</resources>

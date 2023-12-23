@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/games_fragment"
+        android:icon="@drawable/baseline_sports_esports_24"
+        android:title="@string/games" />
+    <item
+        android:id="@+id/achievements_fragment"
+        android:icon="@drawable/baseline_task_alt_24"
+        android:title="@string/achievements" />
+    <item
+        android:id="@+id/myProfile_fragment"
+        android:icon="@drawable/baseline_person_24"
+        android:title="@string/my_profile" />
+</menu>

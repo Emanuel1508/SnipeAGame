@@ -1,0 +1,87 @@
+<resources>
+    <string name="app_name_formatted">Snipe \n A \n Game</string>
+    <string name="app_name">SnipeAGame</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!--Register Screen-->
+    <string name="sign_up">Sign up</string>
+    <string name="register_hint_firstName">First Name</string>
+    <string name="register_hint_lastName">Last Name</string>
+    <string name="register_hint_email">Email Address</string>
+    <string name="register_hint_phone">Phone Number</string>
+    <string name="register_hint_password">Password</string>
+    <string name="register_hint_confirmPassword">Confirm Password</string>
+    <string name="register_text">Register</string>
+    <string name="invalid_phone">The phone number must contain at least 10 digits and must start with 07</string>
+    <string name="invalid_first_name">The introduced first name is invalid</string>
+    <string name="invalid_last_name">The introduced last name is invalid</string>
+    <string name="not_matching_passwords">The passwords are not matching</string>
+    <!--Login Screen-->
+    <string name="sign_in">Sign In</string>
+    <string name="log_in">Log In</string>
+    <string name="forgot_password">Forgot Password ?</string>
+    <string name="empty_password">Please enter your password</string>
+    <string name="invalid_password">Password must contain a minimum of 8 characters, 1 digit and 1 special character</string>
+    <string name="invalid_email">The introduced email is invalid</string>
+    <string name="not_found_email">The email could not be found</string>
+    <string name="no_error">""</string>
+    <!--Success Screen-->
+    <string name="account_created">Congratulations for joining us! You will be redirected back in %1$d seconds</string>
+    <!--Alert Messages-->
+    <string name="sign_up_alert_title">Sign up failed</string>
+    <string name="sign_in_alert_title">Sign in failed</string>
+    <string name="oops_title">Oops!</string>
+    <string name="email_already_used_error">The email is already registered.</string>
+    <string name="no_internet_error">No internet. Please try again later.</string>
+    <string name="incorrect_account_error">Incorrect email or password.</string>
+    <string name="update_user_error">Update user failed.</string>
+    <string name="not_enough_text_error">Not enough text for analyzing</string>
+    <string name="general_error">Something went wrong, please try again.</string>
+    <string name="general_message">General</string>
+    <string name="invalid_user_error">Invalid user.</string>
+    <string name="retry_button">Retry</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="incorrect_email">The email in the field is invalid. Introduce a valid email address above</string>
+    <!--Faction Screen-->
+    <string name="choose_faction">So far so good!</string>
+    <string name="hint_text">Now it\'s time for you to choose your faction</string>
+    <string name="extra_information">Tap here for information</string>
+    <string name="factions_explained">Factions are premade groups meant to bring people together and add dynamism to the game by offering players unique perks.</string>
+    <string name="swipe_to_begin">Swipe left to see the factions</string>
+    <string name="airborne_squad">Airborne Squad</string>
+    <string name="airborne_description">Allows up to 2 players from the team to deploy 10 seconds faster</string>
+    <string name="special_perk">Special Perk</string>
+    <string name="select_faction">SELECT FACTION</string>
+    <string name="immortals">Immortals</string>
+    <string name="immortals_description">Allows the team to revive a single player per match</string>
+    <!--Role Screen-->
+    <string name="choose_role">For the final step it\'s time to choose 2 roles</string>
+    <string name="finish">FINISH</string>
+    <string name="role_designated_marksman">Designated Marksman</string>
+    <string name="designated_marksman_description">Suitable for medium to long range</string>
+    <string name="role_machine_gunner">Machine Gunner</string>
+    <string name="machine_gunner_description">Perfect for suppressing the enemy team</string>
+    <string name="role_assault_rifleman">Assault Rifleman</string>
+    <string name="assault_rifleman_description">Ideal for medium to close engagements</string>
+    <string name="role_grenadier">Grenadier</string>
+    <string name="grenadier_description">Fit for using utility equipment</string>
+    <string name="role_medic">Medic</string>
+    <string name="medic_description">Brings back in game taken out teammates</string>
+    <string name="role_breacher">Breacher</string>
+    <string name="breacher_description">Good at creating entry points</string>
+    <!--Bottom Navigation-->
+    <string name="games">Games</string>
+    <string name="achievements">Achievements</string>
+    <string name="my_profile">My Profile</string>
+    <!--My Profile-->
+    <string name="initial_number">0</string>
+    <string name="full_name">Full Name</string>
+    <string name="first_role">First Role: %1s</string>
+    <string name="second_role">Second Role: %1s</string>
+    <string name="takedowns">Takedowns</string>
+    <string name="email_address">Email: %1s</string>
+    <string name="phone_number">Phone: %1s</string>
+    <!--Achievements Screen-->
+    <string name="available_achievements">AVAILABLE</string>
+    <string name="unlocked_achievements">UNLOCKED</string>
+    <string name="unlock">UNLOCK</string>
+</resources>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/welcomeTitle_textView"
+        style="@style/LargeTitleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/app_name_formatted"
+        android:textColor="@color/stroke_dark_green"
+        app:layout_constraintBottom_toTopOf="@+id/roundImage_cardView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/welcomeTop_guideline" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/roundImage_cardView"
+        android:layout_width="@dimen/size_150"
+        android:layout_height="@dimen/size_150"
+        android:layout_marginBottom="@dimen/size_8"
+        app:cardCornerRadius="@dimen/size_150"
+        app:layout_constraintBottom_toTopOf="@id/welcomeBottom_guideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/splash"
+            android:contentDescription="@string/app_name"/>
+    </androidx.cardview.widget.CardView>
+
+    <Button
+        android:id="@+id/welcomeRegister_button"
+        style="@style/ThemeButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_24"
+        android:text="@string/register_text"
+        android:textAllCaps="true"
+        app:layout_constraintEnd_toEndOf="@id/welcomeEnd_guideline"
+        app:layout_constraintStart_toStartOf="@id/welcomeBegin_guideline"
+        app:layout_constraintTop_toBottomOf="@id/welcomeBottom_guideline" />
+
+    <Button
+        android:id="@+id/welcomeLogin_button"
+        style="@style/WhiteButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_8"
+        android:text="@string/log_in"
+        android:textAllCaps="true"
+        app:layout_constraintEnd_toEndOf="@id/welcomeEnd_guideline"
+        app:layout_constraintStart_toStartOf="@id/welcomeBegin_guideline"
+        app:layout_constraintTop_toBottomOf="@id/welcomeRegister_button" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/welcomeBottom_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.6" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/welcomeTop_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.2" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/welcomeBegin_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/size_64" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/welcomeEnd_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/size_64" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

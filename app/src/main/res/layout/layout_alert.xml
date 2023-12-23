@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/alert_layout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:background="@color/edit_text_focus">
+
+    <TextView
+        android:id="@+id/alertTitle_textView"
+        style="@style/AlertTitleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/size_8"
+        tools:text="@string/sign_up_alert_title" />
+
+    <TextView
+        android:id="@+id/alertDescription_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textSize="@dimen/size_20_text"
+        android:layout_marginTop="@dimen/size_8"
+        tools:text="@string/email_already_used_error" />
+
+    <LinearLayout
+        android:id="@+id/button_linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/size_8">
+
+        <Button
+            android:id="@+id/alertCancel_Button"
+            style="@style/AlertNegativeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/size_8"
+            android:text="@string/cancel_button" />
+
+        <Button
+            android:id="@+id/alertRetry_Button"
+            style="@style/AlertPositiveButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_8"
+            android:text="@string/retry_button" />
+
+    </LinearLayout>
+</LinearLayout>
