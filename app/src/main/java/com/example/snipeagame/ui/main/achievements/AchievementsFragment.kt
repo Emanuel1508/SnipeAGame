@@ -9,6 +9,7 @@ import com.example.snipeagame.base.BaseFragment
 import com.example.snipeagame.databinding.FragmentAchievementsBinding
 import com.example.snipeagame.ui.main.achievements.available.AvailableAchievementsFragment
 import com.example.snipeagame.ui.main.achievements.unlocked.UnlockedAchievementsFragment
+import com.example.snipeagame.utils.FragmentTabAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,12 +30,12 @@ class AchievementsFragment :
         setupTabLayout(adapter, viewPager)
     }
 
-    private fun setupAchievementsAdapter() = AchievementsAdapter(requireActivity()).apply {
+    private fun setupAchievementsAdapter() = FragmentTabAdapter(requireActivity()).apply {
         addFragment(AvailableAchievementsFragment(), R.string.available_achievements)
         addFragment(UnlockedAchievementsFragment(), R.string.unlocked_achievements)
     }
 
-    private fun setupViewPager(adapter: AchievementsAdapter): ViewPager2 {
+    private fun setupViewPager(adapter: FragmentTabAdapter): ViewPager2 {
         with(binding) {
             val viewPager = achievementsViewPager
             achievementsViewPager.adapter = adapter
@@ -42,7 +43,7 @@ class AchievementsFragment :
         }
     }
 
-    private fun setupTabLayout(adapter: AchievementsAdapter, viewPager: ViewPager2) {
+    private fun setupTabLayout(adapter: FragmentTabAdapter, viewPager: ViewPager2) {
         val tabs: TabLayout = binding.achievementsTabLayout
         TabLayoutMediator(tabs, viewPager) { tab, position ->
             tab.text = getString(adapter.getTabTitle(position))

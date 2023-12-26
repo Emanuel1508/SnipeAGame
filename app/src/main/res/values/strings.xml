@@ -84,4 +84,7 @@
     <string name="available_achievements">AVAILABLE</string>
     <string name="unlocked_achievements">UNLOCKED</string>
     <string name="unlock">UNLOCK</string>
+    <!--Games Screen-->
+    <string name="all_games">ALL GAMES</string>
+    <string name="my_games">MY GAMES</string>
 </resources>
