@@ -7,7 +7,10 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.snipeagame.R
 import com.example.snipeagame.base.BaseActivity
 import com.example.snipeagame.databinding.ActivityMainBinding
+import com.example.snipeagame.ui.main.games.create_game.CreateGameFragmentDirections
 import com.example.snipeagame.utils.StringConstants
+import com.example.snipeagame.utils.gone
+import com.example.snipeagame.utils.show
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -24,6 +27,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     as NavHostFragment).navController
         binding.mainBottomNavigation.setupWithNavController(navController)
         setupBottomNavBar(navController)
+        navigationVisibility(navController)
     }
 
     private fun setupBottomNavBar(navController: NavController) {
@@ -50,5 +54,27 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             R.id.achievements_fragment -> title = getString(R.string.achievements)
         }
         binding.mainToolbar.title = title
+    }
+
+    private fun navigationVisibility(navController: NavController) {
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id == R.id.createGameFragment) {
+                binding.mainBottomNavigation.gone()
+                supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                navigateToGamesFragment(navController)
+            } else {
+                binding.mainBottomNavigation.show()
+                supportActionBar?.setDisplayHomeAsUpEnabled(false)
+            }
+        }
+    }
+
+    private fun navigateToGamesFragment(navController: NavController) {
+        binding.mainToolbar.setNavigationOnClickListener {
+            navController.navigate(
+                CreateGameFragmentDirections
+                    .actionCreateGameFragmentToGamesFragment()
+            )
+        }
     }
 }

@@ -7,7 +7,11 @@
     <fragment
         android:id="@+id/games_fragment"
         android:name="com.example.snipeagame.ui.main.games.GamesFragment"
-        android:label="Games" />
+        android:label="Games" >
+        <action
+            android:id="@+id/action_games_fragment_to_createGameFragment"
+            app:destination="@id/createGameFragment" />
+    </fragment>
     <fragment
         android:id="@+id/myProfile_fragment"
         android:name="com.example.snipeagame.ui.main.profile.MyProfileFragment"
@@ -24,4 +28,12 @@
         android:id="@+id/unlockedAchievementsFragment"
         android:name="com.example.snipeagame.ui.main.achievements.unlocked.UnlockedAchievementsFragment"
         android:label="UnlockedAchievementsFragment" />
+    <fragment
+        android:id="@+id/createGameFragment"
+        android:name="com.example.snipeagame.ui.main.games.create_game.CreateGameFragment"
+        android:label="CreateGameFragment" >
+        <action
+            android:id="@+id/action_createGameFragment_to_games_fragment"
+            app:destination="@id/games_fragment" />
+    </fragment>
 </navigation>
