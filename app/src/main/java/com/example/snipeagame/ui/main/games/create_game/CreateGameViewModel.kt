@@ -2,6 +2,7 @@ package com.example.snipeagame.ui.main.games.create_game
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.domain.utils.NumberConstants
 import com.example.snipeagame.base.BaseViewModel
 import com.example.snipeagame.utils.ButtonState
 import com.example.snipeagame.utils.SingleLiveEvent
@@ -21,6 +22,7 @@ class CreateGameViewModel @Inject constructor() : BaseViewModel() {
     private var gameDateState: Boolean = false
     private var gameTimeState: Boolean = false
     private var gameLocationState: Boolean = false
+    private var gameNumberOfPlayersState: Boolean = false
 
     fun onSelectDateButtonClick() {
         _navigation.value = ShowDialog.DateDialog
@@ -42,12 +44,17 @@ class CreateGameViewModel @Inject constructor() : BaseViewModel() {
         }
     }
 
+    fun onValidateTime(timeData: String) {
+        gameTimeState = timeData.isNotEmpty()
+    }
+
     fun onValidateLocation(location: String) {
         gameLocationState = location.isNotEmpty()
     }
 
-    fun onValidateTime(timeData: String) {
-        gameTimeState = timeData.isNotEmpty()
+    fun onValidateNumberOfPlayers(numberOfPlayers: String) {
+        gameNumberOfPlayersState = (numberOfPlayers.toInt() >= NumberConstants.MIN_PLAYERS
+                && numberOfPlayers.toInt() <= NumberConstants.MAX_PLAYERS)
     }
 
     fun isButtonActive() {

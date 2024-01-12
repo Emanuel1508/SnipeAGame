@@ -78,6 +78,24 @@
             android:inputType="text" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/players_InputLayout"
+        style="@style/TextLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/number_of_players"
+        app:layout_constraintEnd_toEndOf="@id/endVerticalGuideline"
+        app:layout_constraintStart_toStartOf="@id/startVerticalGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/location_InputLayout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/players_inputText"
+            style="@style/InputText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal" />
+    </com.google.android.material.textfield.TextInputLayout>
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/createGame_topHorizontalGuideline"
         android:layout_width="wrap_content"
@@ -111,6 +129,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.65" />
+        app:layout_constraintGuide_percent="0.62" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

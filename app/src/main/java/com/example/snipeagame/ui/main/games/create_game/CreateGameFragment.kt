@@ -44,6 +44,10 @@ class CreateGameFragment :
                     onValidateLocation(locationInputText.text.toString())
                     isButtonActive()
                 }
+                playersInputText.doAfterTextChanged {
+                    onValidateNumberOfPlayers(playersInputText.text.toString())
+                    isButtonActive()
+                }
             }
         }
     }

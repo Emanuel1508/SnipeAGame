@@ -22,4 +22,5 @@ abstract class RepositoryModule {
 
     @Binds
     abstract fun bindAchievementsRepository(achievementsRepositoryImpl: AchievementsRepositoryImpl): AchievementsRepository
+
 }
