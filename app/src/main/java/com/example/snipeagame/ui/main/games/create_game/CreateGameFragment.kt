@@ -6,15 +6,24 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewModelScope
+import androidx.navigation.fragment.findNavController
+import com.example.domain.models.Result
+import com.example.domain.utils.ErrorMessage
 import com.example.snipeagame.R
 import com.example.snipeagame.base.BaseFragment
 import com.example.snipeagame.databinding.FragmentCreateGameBinding
 import com.example.snipeagame.ui.main.games.create_game.CreateGameViewModel.ShowDialog
+import com.example.snipeagame.utils.AlertDialogFragment
 import com.example.snipeagame.utils.ButtonState
 import com.example.snipeagame.utils.StringConstants
 import com.example.snipeagame.utils.disable
 import com.example.snipeagame.utils.enable
+import com.example.snipeagame.utils.hideRefresh
+import com.example.snipeagame.utils.mapToUI
+import com.example.snipeagame.utils.showRefresh
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -24,6 +33,8 @@ import java.util.TimeZone
 class CreateGameFragment :
     BaseFragment<FragmentCreateGameBinding>(FragmentCreateGameBinding::inflate) {
     private val viewModel: CreateGameViewModel by viewModels()
+    private val TAG = this::class.java.simpleName
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupListeners()
@@ -48,6 +59,16 @@ class CreateGameFragment :
                     onValidateNumberOfPlayers(playersInputText.text.toString())
                     isButtonActive()
                 }
+                createGameButton.setOnClickListener {
+                    viewModelScope.launch {
+                        onCreateGameButtonPress(
+                            formatDate(),
+                            formatTime(),
+                            locationInputText.text.toString(),
+                            playersInputText.text.toString()
+                        )
+                    }
+                }
             }
         }
     }
@@ -67,6 +88,15 @@ class CreateGameFragment :
                         is ButtonState.NotEnabled -> createGameButton.disable()
                     }
                 }
+            }
+            loadingLiveData.observe(viewLifecycleOwner) {
+                updateRefreshAnimation(it)
+            }
+            errorLiveData.observe(viewLifecycleOwner) { error ->
+                showDialog(error.message)
+            }
+            successLiveData.observe(viewLifecycleOwner) {
+                navigateToAllGamesFragment()
             }
         }
     }
@@ -109,6 +139,11 @@ class CreateGameFragment :
         ).show()
     }
 
+    private fun navigateToAllGamesFragment() {
+        findNavController()
+            .navigate(CreateGameFragmentDirections.actionCreateGameFragmentToGamesFragment())
+    }
+
     private fun updateDateLabel(calendarDate: Calendar?) {
         val date = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
         calendarDate?.let { calendar ->
@@ -149,5 +184,26 @@ class CreateGameFragment :
     private fun formatTime(): String {
         return binding.gameTimeTextView.text.toString()
             .replace(StringConstants.GAME_TIME, StringConstants.EMPTY_STRING)
+    }
+
+    private fun updateRefreshAnimation(value: Result.Loading) {
+        when (value.shouldShowLoading) {
+            true -> showLoadingAnimation()
+            false -> hideLoadingAnimation()
+        }
+    }
+
+    private fun showLoadingAnimation() = binding.createGameSwipeRefresh.showRefresh()
+
+    private fun hideLoadingAnimation() = binding.createGameSwipeRefresh.hideRefresh()
+
+    private fun showDialog(error: ErrorMessage) {
+        val alertDialogFragment = AlertDialogFragment.newInstance(
+            title = getString(R.string.oops_title),
+            description = getString(error.mapToUI()),
+            onRetryClick = {
+            }
+        )
+        alertDialogFragment.show(parentFragmentManager, TAG)
     }
 }

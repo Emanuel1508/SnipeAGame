@@ -7,5 +7,7 @@ class DatabaseConstants {
         const val ROLES = "roles"
         const val ACHIEVEMENTS = "Achievements"
         const val MY_ACHIEVEMENTS = "My_Achievements"
+        const val ALL_GAMES = "All_Games"
+        const val MY_GAMES = "My_Games"
     }
 }

@@ -132,6 +132,7 @@ class RegisterFragment :
     }
 
     private fun showLoadingAnimation() = binding.registerSwipeRefresh.showRefresh()
+
     private fun hideLoadingAnimation() = binding.registerSwipeRefresh.hideRefresh()
 
     private fun navigateToSuccessScreen() {

@@ -1,8 +1,12 @@
 package com.example.snipeagame.ui.main.games.create_game
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.domain.usecases.CreateGameUseCase
+import com.example.domain.utils.ErrorMessage
 import com.example.domain.utils.NumberConstants
+import com.example.domain.utils.UseCaseResponse
 import com.example.snipeagame.base.BaseViewModel
 import com.example.snipeagame.utils.ButtonState
 import com.example.snipeagame.utils.SingleLiveEvent
@@ -11,10 +15,13 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
-class CreateGameViewModel @Inject constructor() : BaseViewModel() {
+class CreateGameViewModel @Inject constructor(
+    private val createGamesUseCase: CreateGameUseCase
+) : BaseViewModel() {
     private val _navigation = SingleLiveEvent<ShowDialog>()
     val navigation: LiveData<ShowDialog> get() = _navigation
     private val _createButtonState = MutableLiveData<ButtonState>()
@@ -23,6 +30,7 @@ class CreateGameViewModel @Inject constructor() : BaseViewModel() {
     private var gameTimeState: Boolean = false
     private var gameLocationState: Boolean = false
     private var gameNumberOfPlayersState: Boolean = false
+    private val TAG: String = this::class.java.simpleName
 
     fun onSelectDateButtonClick() {
         _navigation.value = ShowDialog.DateDialog
@@ -62,6 +70,44 @@ class CreateGameViewModel @Inject constructor() : BaseViewModel() {
             _createButtonState.value = ButtonState.IsEnabled
         else
             _createButtonState.value = ButtonState.NotEnabled
+    }
+
+    suspend fun onCreateGameButtonPress(
+        date: String,
+        time: String,
+        location: String,
+        numberOfPlayers: String
+    ) {
+        showLoading()
+        val gameCreationResponse = createGamesUseCase(
+            gameId = UUID.randomUUID().toString(),
+            date = date,
+            time = time,
+            location = location,
+            numberOfPlayers = numberOfPlayers
+        )
+        handleGameCreationResponse(gameCreationResponse)
+    }
+
+    private fun handleGameCreationResponse(response: UseCaseResponse<String>) {
+        when(response) {
+            is UseCaseResponse.Success -> onSuccess(response)
+            is UseCaseResponse.Failure -> showErrorMessage(
+                errorMessage = response.error,
+                logMessage = "Game creation failed with error, ${response.error}"
+            )
+        }
+    }
+
+    private fun showErrorMessage(errorMessage: ErrorMessage, logMessage: String) {
+        hideLoading()
+        showError(errorMessage)
+        Log.v(TAG, logMessage)
+    }
+
+    private fun onSuccess(response: UseCaseResponse<String>) {
+        hideLoading()
+        showSuccess(response)
     }
 
     private fun isDateValid(currentDate: Date, selectedDate: Date) =

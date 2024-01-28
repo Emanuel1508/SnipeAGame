@@ -2,7 +2,9 @@ package com.example.data.modules
 
 import com.example.domain.repositories.AchievementsRepository
 import com.example.domain.repositories.AuthenticationRepository
+import com.example.domain.repositories.GamesRepository
 import com.example.domain.repositories.UserRepository
+import com.example.domain.usecases.CreateGameUseCase
 import com.example.domain.usecases.GetUserIdUseCase
 import com.example.domain.usecases.CreateUserUseCase
 import com.example.domain.usecases.GetAvailableAchievementsUseCase
@@ -71,4 +73,9 @@ object UseCaseModules {
     @Provides
     fun provideGetUnlockedAchievementsUseCase(repository: AchievementsRepository) =
         GetUnlockedAchievementsUseCase(repository)
+
+    @Singleton
+    @Provides
+    fun provideCreateGameUseCase(repository: GamesRepository) =
+        CreateGameUseCase(repository)
 }
