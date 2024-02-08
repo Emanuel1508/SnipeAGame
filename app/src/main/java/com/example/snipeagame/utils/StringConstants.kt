@@ -10,5 +10,7 @@ class StringConstants {
         const val IMMORTALS = "Immortals"
         const val GAME_DATE = "Game Date: "
         const val GAME_TIME = "Game Time: "
+        const val GAME_LOCATION = "Game Location: "
+        const val MAXIMUM_PLAYERS = "Maximum Players: "
     }
 }

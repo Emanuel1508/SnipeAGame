@@ -1,11 +1,13 @@
 package com.example.snipeagame.ui.main.games.all_games
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.models.GameParameters
 import com.example.domain.utils.NumberConstants
 import com.example.snipeagame.databinding.ItemGameBinding
+import com.example.snipeagame.utils.StringConstants
 
 class AllGamesAdapter() : RecyclerView.Adapter<AllGamesAdapter.ViewHolder>() {
     private val allGames = mutableListOf<GameParameters>()
@@ -37,13 +39,14 @@ class AllGamesAdapter() : RecyclerView.Adapter<AllGamesAdapter.ViewHolder>() {
         val button = binding.joinGameButton
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setViews(holder: ViewHolder, game: GameParameters) {
         holder.apply {
             game.apply {
-                dateTextView.text = date
-                timeTextView.text = time
-                locationTextView.text = location
-                numberOfPlayersTextView.text = numberOfPlayers
+                dateTextView.text = StringConstants.GAME_DATE + date
+                timeTextView.text = StringConstants.GAME_TIME + time
+                locationTextView.text = StringConstants.GAME_LOCATION + location
+                numberOfPlayersTextView.text = StringConstants.MAXIMUM_PLAYERS + numberOfPlayers
             }
         }
     }

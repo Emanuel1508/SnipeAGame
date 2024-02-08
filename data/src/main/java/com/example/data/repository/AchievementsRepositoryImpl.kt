@@ -31,8 +31,8 @@ class AchievementsRepositoryImpl @Inject constructor(
                 .collection(DatabaseConstants.MY_ACHIEVEMENTS)
                 .get()
                 .await()
-            unlockedAchievements = documentToObject(unlockedAchievementsDocuments)
-            achievementsList = documentToObject(availableAchievementsDocuments)
+            unlockedAchievements = documentToAchievementObject(unlockedAchievementsDocuments)
+            achievementsList = documentToAchievementObject(availableAchievementsDocuments)
             val lockedAchievements =
                 retainLockedAchievements(achievementsList, unlockedAchievements)
             UseCaseResponse.Success(lockedAchievements)
@@ -68,7 +68,7 @@ class AchievementsRepositoryImpl @Inject constructor(
                 .collection(DatabaseConstants.MY_ACHIEVEMENTS)
                 .get()
                 .await()
-            unlockedAchievements = documentToObject(documents)
+            unlockedAchievements = documentToAchievementObject(documents)
             for (element in unlockedAchievements) {
                 Log.v(TAG, element.title)
             }
@@ -80,7 +80,7 @@ class AchievementsRepositoryImpl @Inject constructor(
         }
     }
 
-    private fun documentToObject(documents: QuerySnapshot): List<AchievementsParameters> {
+    private fun documentToAchievementObject(documents: QuerySnapshot): List<AchievementsParameters> {
         val list: ArrayList<AchievementsParameters> = ArrayList()
         for (document in documents) {
             list.add(document.toObject(AchievementsParameters::class.java))
