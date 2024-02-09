@@ -41,7 +41,7 @@ class CreateGameViewModel @Inject constructor(
     }
 
     fun onValidateDate(date: String) {
-        val dateFormatter = SimpleDateFormat("dd-mm-yyyy", Locale.getDefault())
+        val dateFormatter = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
         val selectedDate = dateFormatter.parse(date)
         if (selectedDate != null) {
             gameDateState = isDateValid(Calendar.getInstance().time, selectedDate)
@@ -66,7 +66,7 @@ class CreateGameViewModel @Inject constructor(
     }
 
     fun isButtonActive() {
-        if (gameDateState && gameTimeState && gameLocationState)
+        if (gameDateState && gameTimeState && gameLocationState && gameNumberOfPlayersState)
             _createButtonState.value = ButtonState.IsEnabled
         else
             _createButtonState.value = ButtonState.NotEnabled
@@ -90,7 +90,7 @@ class CreateGameViewModel @Inject constructor(
     }
 
     private fun handleGameCreationResponse(response: UseCaseResponse<String>) {
-        when(response) {
+        when (response) {
             is UseCaseResponse.Success -> onSuccess(response)
             is UseCaseResponse.Failure -> showErrorMessage(
                 errorMessage = response.error,

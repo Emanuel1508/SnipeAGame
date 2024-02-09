@@ -1,5 +1,6 @@
 package com.example.data.repository
 
+import android.util.Log
 import com.example.data.utils.DatabaseConstants
 import com.example.data.utils.StringConstants
 import com.example.domain.models.GameParameters
@@ -15,10 +16,13 @@ import javax.inject.Inject
 class GamesRepositoryImpl @Inject constructor(
     private val firestore: FirebaseFirestore
 ) : GamesRepository {
+    private val TAG: String = this::class.java.simpleName
     override suspend fun createGame(gameData: GameParameters): UseCaseResponse<String> {
         return try {
             firestore.collection(DatabaseConstants.ALL_GAMES)
                 .document(gameData.gameId)
+                .collection(DatabaseConstants.GAME_DATA)
+                .document()
                 .set(gameData)
             UseCaseResponse.Success(StringConstants.SUCCESS)
         } catch (unknownHostException: UnknownHostException) {
@@ -33,8 +37,10 @@ class GamesRepositoryImpl @Inject constructor(
             val allGamesDocumentSnapshot = firestore.collection(DatabaseConstants.ALL_GAMES)
                 .get()
                 .await()
-            val games = documentToGameObject(allGamesDocumentSnapshot)
-            UseCaseResponse.Success(games)
+
+            Log.v(TAG, allGamesDocumentSnapshot.documents.size.toString())
+
+            UseCaseResponse.Success(mutableListOf())
         } catch (unknownHostException: UnknownHostException) {
             unknownHostException.getGamesError(ErrorMessage.NO_NETWORK)
         } catch (exception: Exception) {
@@ -53,6 +59,7 @@ class GamesRepositoryImpl @Inject constructor(
     private fun documentToGameObject(documents: QuerySnapshot): List<GameParameters> {
         val list: ArrayList<GameParameters> = ArrayList()
         for (document in documents) {
+            Log.v(TAG, document.toObject(GameParameters::class.java).toString())
             list.add(document.toObject(GameParameters::class.java))
         }
         return list

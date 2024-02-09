@@ -9,7 +9,8 @@ import com.example.domain.utils.NumberConstants
 import com.example.snipeagame.databinding.ItemGameBinding
 import com.example.snipeagame.utils.StringConstants
 
-class AllGamesAdapter() : RecyclerView.Adapter<AllGamesAdapter.ViewHolder>() {
+class AllGamesAdapter(private val gameClickListener: GameClickListener) :
+    RecyclerView.Adapter<AllGamesAdapter.ViewHolder>() {
     private val allGames = mutableListOf<GameParameters>()
     private val TAG = this::class.java.simpleName
 
@@ -21,6 +22,7 @@ class AllGamesAdapter() : RecyclerView.Adapter<AllGamesAdapter.ViewHolder>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val game = allGames[position]
         setViews(holder, game)
+        setupListeners(holder, game)
     }
 
     fun setGames(games: Collection<GameParameters>) {
@@ -49,5 +51,16 @@ class AllGamesAdapter() : RecyclerView.Adapter<AllGamesAdapter.ViewHolder>() {
                 numberOfPlayersTextView.text = StringConstants.MAXIMUM_PLAYERS + numberOfPlayers
             }
         }
+    }
+
+    private fun setupListeners(holder: ViewHolder, game: GameParameters) {
+        val position = allGames.indexOf(game)
+        holder.button.setOnClickListener {
+            gameClickListener.onGameClick(game)
+        }
+    }
+
+    interface GameClickListener {
+        fun onGameClick(game: GameParameters)
     }
 }

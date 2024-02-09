@@ -2,9 +2,11 @@ package com.example.snipeagame.ui.main.games.all_games
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.example.domain.models.GameParameters
 import com.example.domain.models.Result
 import com.example.domain.utils.ErrorMessage
 import com.example.snipeagame.R
@@ -31,10 +33,13 @@ class AllGamesFragment : BaseFragment<FragmentAllGamesBinding>(FragmentAllGamesB
     }
 
     private fun setupAdapter() {
-        adapter = AllGamesAdapter()
+        adapter = AllGamesAdapter(object : AllGamesAdapter.GameClickListener {
+            override fun onGameClick(game: GameParameters) {
+                Toast.makeText(requireContext(), game.gameId, Toast.LENGTH_LONG).show()
+            }
+        })
         recyclerView = binding.allGamesRecyclerView
         recyclerView.adapter = adapter
-
         viewModel.games.observe(viewLifecycleOwner) { games ->
             adapter.setGames(games)
         }
