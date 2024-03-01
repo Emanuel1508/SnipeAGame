@@ -5,13 +5,15 @@ import com.example.domain.repositories.AuthenticationRepository
 import com.example.domain.repositories.GamesRepository
 import com.example.domain.repositories.UserRepository
 import com.example.domain.usecases.CreateGameUseCase
-import com.example.domain.usecases.GetUserIdUseCase
 import com.example.domain.usecases.CreateUserUseCase
 import com.example.domain.usecases.GetAvailableAchievementsUseCase
 import com.example.domain.usecases.GetFactionUseCase
 import com.example.domain.usecases.GetGamesUseCase
+import com.example.domain.usecases.GetProfileDataForGamesUseCase
 import com.example.domain.usecases.GetProfileDataUseCase
 import com.example.domain.usecases.GetUnlockedAchievementsUseCase
+import com.example.domain.usecases.GetUserIdUseCase
+import com.example.domain.usecases.JoinGameUseCase
 import com.example.domain.usecases.UnlockAchievementUseCase
 import com.example.domain.usecases.UpdateUserGroupsUseCase
 import com.example.domain.usecases.UserLoginUseCase
@@ -84,4 +86,14 @@ object UseCaseModules {
     @Provides
     fun provideGetGamesUseCase(repository: GamesRepository) =
         GetGamesUseCase(repository)
+
+    @Singleton
+    @Provides
+    fun provideGetProfileDataForGamesUseCase(repository: UserRepository) =
+        GetProfileDataForGamesUseCase(repository)
+
+    @Singleton
+    @Provides
+    fun provideJoinGameUseCase(repository: GamesRepository) =
+        JoinGameUseCase(repository)
 }

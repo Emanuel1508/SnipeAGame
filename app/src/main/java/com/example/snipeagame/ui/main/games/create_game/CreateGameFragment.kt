@@ -3,6 +3,7 @@ package com.example.snipeagame.ui.main.games.create_game
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
@@ -37,6 +38,7 @@ class CreateGameFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.v(TAG, activity.toString())
         setupListeners()
         setupObservers()
         formatInitialText()

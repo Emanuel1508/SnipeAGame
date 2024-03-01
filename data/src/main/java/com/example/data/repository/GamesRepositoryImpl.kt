@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.data.utils.DatabaseConstants
 import com.example.data.utils.StringConstants
 import com.example.domain.models.GameParameters
+import com.example.domain.models.UserGameDataParameters
 import com.example.domain.repositories.GamesRepository
 import com.example.domain.utils.ErrorMessage
 import com.example.domain.utils.UseCaseResponse
@@ -21,8 +22,6 @@ class GamesRepositoryImpl @Inject constructor(
         return try {
             firestore.collection(DatabaseConstants.ALL_GAMES)
                 .document(gameData.gameId)
-                .collection(DatabaseConstants.GAME_DATA)
-                .document()
                 .set(gameData)
             UseCaseResponse.Success(StringConstants.SUCCESS)
         } catch (unknownHostException: UnknownHostException) {
@@ -34,13 +33,11 @@ class GamesRepositoryImpl @Inject constructor(
 
     override suspend fun getAllGames(): UseCaseResponse<List<GameParameters>> {
         return try {
-            val allGamesDocumentSnapshot = firestore.collection(DatabaseConstants.ALL_GAMES)
+            val gamesDocumentSnapshot = firestore.collection(DatabaseConstants.ALL_GAMES)
                 .get()
                 .await()
-
-            Log.v(TAG, allGamesDocumentSnapshot.documents.size.toString())
-
-            UseCaseResponse.Success(mutableListOf())
+            val games = documentToGameObject(gamesDocumentSnapshot)
+            UseCaseResponse.Success(games)
         } catch (unknownHostException: UnknownHostException) {
             unknownHostException.getGamesError(ErrorMessage.NO_NETWORK)
         } catch (exception: Exception) {
@@ -48,7 +45,10 @@ class GamesRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun joinGame(userId: String, gameId: String): UseCaseResponse<String> {
+    override suspend fun joinGame(
+        user: UserGameDataParameters,
+        game: GameParameters
+    ): UseCaseResponse<String> {
         TODO("Not yet implemented")
     }
 

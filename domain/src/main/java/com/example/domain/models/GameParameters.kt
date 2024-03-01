@@ -5,13 +5,15 @@ data class GameParameters(
     val date: String,
     val time: String,
     val location: String,
-    val numberOfPlayers: String
+    val numberOfPlayers: String,
+    val currentPlayers: Int
 ) {
     constructor() : this(
         "",
         "",
         "",
         "",
-        ""
+        "",
+        0
     )
 }

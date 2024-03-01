@@ -48,7 +48,7 @@ class AllGamesAdapter(private val gameClickListener: GameClickListener) :
                 dateTextView.text = StringConstants.GAME_DATE + date
                 timeTextView.text = StringConstants.GAME_TIME + time
                 locationTextView.text = StringConstants.GAME_LOCATION + location
-                numberOfPlayersTextView.text = StringConstants.MAXIMUM_PLAYERS + numberOfPlayers
+                numberOfPlayersTextView.text = "${StringConstants.PLAYERS}$currentPlayers/$numberOfPlayers"
             }
         }
     }
@@ -57,6 +57,8 @@ class AllGamesAdapter(private val gameClickListener: GameClickListener) :
         val position = allGames.indexOf(game)
         holder.button.setOnClickListener {
             gameClickListener.onGameClick(game)
+            allGames.remove(game)
+            notifyItemRemoved(position)
         }
     }
 

@@ -84,7 +84,8 @@ class CreateGameViewModel @Inject constructor(
             date = date,
             time = time,
             location = location,
-            numberOfPlayers = numberOfPlayers
+            numberOfPlayers = numberOfPlayers,
+            currentPlayers = NumberConstants.ZERO
         )
         handleGameCreationResponse(gameCreationResponse)
     }

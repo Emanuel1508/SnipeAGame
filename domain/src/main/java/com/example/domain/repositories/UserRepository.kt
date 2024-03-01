@@ -1,6 +1,7 @@
 package com.example.domain.repositories
 
 import com.example.domain.models.UserDataParameters
+import com.example.domain.models.UserGameDataParameters
 import com.example.domain.models.UserGroupUpdateParameters
 import com.example.domain.utils.UseCaseResponse
 
@@ -16,4 +17,6 @@ interface UserRepository {
     suspend fun getFaction(userId: String): UseCaseResponse<String?>
 
     suspend fun getProfileData(userId: String): UseCaseResponse<UserDataParameters>
+
+    suspend fun getProfileDataForGames(userId: String): UseCaseResponse<UserGameDataParameters>
 }

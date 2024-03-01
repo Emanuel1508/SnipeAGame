@@ -10,14 +10,17 @@ class CreateGameUseCase(private val gamesRepository: GamesRepository) {
         date: String,
         time: String,
         location: String,
-        numberOfPlayers: String
+        numberOfPlayers: String,
+        currentPlayers: Int
     ): UseCaseResponse<String> {
         val gameParameters = GameParameters(
             gameId = gameId,
             date = date,
             time = time,
             location = location,
-            numberOfPlayers = numberOfPlayers
+            numberOfPlayers = numberOfPlayers,
+            currentPlayers = currentPlayers
+
         )
         return gamesRepository.createGame(gameParameters)
     }

@@ -28,6 +28,7 @@ class RegisterFragment :
     private val TAG = this::class.java.simpleName
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        hideLoadingAnimation()
         setupObservers()
         setupListeners()
     }

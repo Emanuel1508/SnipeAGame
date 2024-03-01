@@ -47,7 +47,6 @@ class MyProfileViewModel @Inject constructor(
                     profileParameters.roles,
                     profileParameters.takedowns,
                     profileParameters.games
-
                 )
             )
         }

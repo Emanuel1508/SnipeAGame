@@ -3,10 +3,12 @@ package com.example.data.repository
 import com.example.data.utils.DatabaseConstants
 import com.example.data.utils.StringConstants
 import com.example.domain.models.UserDataParameters
+import com.example.domain.models.UserGameDataParameters
 import com.example.domain.models.UserGroupUpdateParameters
 import com.example.domain.repositories.UserRepository
 import com.example.domain.utils.ErrorMessage
 import com.example.domain.utils.UseCaseResponse
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import java.net.UnknownHostException
@@ -84,6 +86,30 @@ class UserRepositoryImpl @Inject constructor(
         } catch (exception: Exception) {
             exception.getUserError(ErrorMessage.GENERAL)
         }
+    }
+
+    override suspend fun getProfileDataForGames(userId: String):
+            UseCaseResponse<UserGameDataParameters> {
+        return try {
+            val result = firestore.collection(DatabaseConstants.PROFILES)
+                .document(userId)
+                .get()
+                .await()
+            val finalResult = documentToUserGameData(result)
+            UseCaseResponse.Success(finalResult)
+        } catch (unknownHostException: UnknownHostException) {
+            unknownHostException.getUserError(ErrorMessage.NO_NETWORK)
+        } catch (exception: Exception) {
+            exception.getUserError(ErrorMessage.GENERAL)
+        }
+    }
+
+    private fun documentToUserGameData(document: DocumentSnapshot): UserGameDataParameters {
+        val profileData = document.toObject(UserGameDataParameters::class.java)
+        if(profileData != null) {
+            return profileData
+        }
+        return UserGameDataParameters()
     }
 
     private fun java.lang.Exception.getUserError(error: ErrorMessage): UseCaseResponse.Failure {

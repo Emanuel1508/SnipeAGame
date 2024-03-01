@@ -2,7 +2,6 @@ package com.example.snipeagame.ui.main.games.all_games
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -35,7 +34,7 @@ class AllGamesFragment : BaseFragment<FragmentAllGamesBinding>(FragmentAllGamesB
     private fun setupAdapter() {
         adapter = AllGamesAdapter(object : AllGamesAdapter.GameClickListener {
             override fun onGameClick(game: GameParameters) {
-                Toast.makeText(requireContext(), game.gameId, Toast.LENGTH_LONG).show()
+                viewModel.onJoinGameButtonPress()
             }
         })
         recyclerView = binding.allGamesRecyclerView
