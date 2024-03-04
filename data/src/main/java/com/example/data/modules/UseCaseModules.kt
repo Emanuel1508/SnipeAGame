@@ -9,6 +9,7 @@ import com.example.domain.usecases.CreateUserUseCase
 import com.example.domain.usecases.GetAvailableAchievementsUseCase
 import com.example.domain.usecases.GetFactionUseCase
 import com.example.domain.usecases.GetGamesUseCase
+import com.example.domain.usecases.GetMyGamesUseCase
 import com.example.domain.usecases.GetProfileDataForGamesUseCase
 import com.example.domain.usecases.GetProfileDataUseCase
 import com.example.domain.usecases.GetUnlockedAchievementsUseCase
@@ -96,4 +97,9 @@ object UseCaseModules {
     @Provides
     fun provideJoinGameUseCase(repository: GamesRepository) =
         JoinGameUseCase(repository)
+
+    @Singleton
+    @Provides
+    fun provideMyGamesUseCase(repository: GamesRepository) =
+        GetMyGamesUseCase(repository)
 }

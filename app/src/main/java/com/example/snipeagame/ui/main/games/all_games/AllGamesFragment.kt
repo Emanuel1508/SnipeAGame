@@ -24,6 +24,7 @@ class AllGamesFragment : BaseFragment<FragmentAllGamesBinding>(FragmentAllGamesB
     private lateinit var adapter: AllGamesAdapter
     private lateinit var recyclerView: RecyclerView
     private val TAG = this::class.java.simpleName
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         onCreateGameButtonClick()
@@ -34,7 +35,7 @@ class AllGamesFragment : BaseFragment<FragmentAllGamesBinding>(FragmentAllGamesB
     private fun setupAdapter() {
         adapter = AllGamesAdapter(object : AllGamesAdapter.GameClickListener {
             override fun onGameClick(game: GameParameters) {
-                viewModel.onJoinGameButtonPress()
+                viewModel.onJoinGameButtonPress(game)
             }
         })
         recyclerView = binding.allGamesRecyclerView

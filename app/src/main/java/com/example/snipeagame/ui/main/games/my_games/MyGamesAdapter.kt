@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.models.GameParameters
+import com.example.domain.utils.NumberConstants
 import com.example.snipeagame.databinding.ItemGameBinding
 import com.example.snipeagame.utils.StringConstants
 
@@ -23,6 +24,7 @@ class MyGamesAdapter(private val myGameClickListener: MyGameClickListener) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val game = myGames[position]
         setViews(holder, game)
+        setupListener(holder, game)
     }
 
     @SuppressLint("SetTextI18n")
@@ -38,7 +40,13 @@ class MyGamesAdapter(private val myGameClickListener: MyGameClickListener) :
         }
     }
 
-    fun setupListener(holder: ViewHolder, game: GameParameters) {
+    fun setMyGames(games: List<GameParameters>) {
+        myGames.clear()
+        myGames.addAll(games)
+        notifyItemChanged(NumberConstants.ZERO, myGames.size)
+    }
+
+    private fun setupListener(holder: ViewHolder, game: GameParameters) {
         holder.itemView.setOnClickListener {
             myGameClickListener.onMyGameClick(game)
         }

@@ -2,7 +2,7 @@ package com.example.domain.models
 
 data class UserGameDataParameters(
     val name: String,
-    val phone: String,
+    val email: String,
     val faction: String,
     val roles: ArrayList<String>,
 ) {

@@ -31,10 +31,12 @@ class AchievementsRepositoryImpl @Inject constructor(
                 .collection(DatabaseConstants.MY_ACHIEVEMENTS)
                 .get()
                 .await()
+
             unlockedAchievements = documentToAchievementObject(unlockedAchievementsDocuments)
             achievementsList = documentToAchievementObject(availableAchievementsDocuments)
             val lockedAchievements =
                 retainLockedAchievements(achievementsList, unlockedAchievements)
+
             UseCaseResponse.Success(lockedAchievements)
         } catch (unknownHostException: UnknownHostException) {
             unknownHostException.getAchievementError(ErrorMessage.NO_NETWORK)

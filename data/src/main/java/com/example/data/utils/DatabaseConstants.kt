@@ -10,5 +10,7 @@ class DatabaseConstants {
         const val ALL_GAMES = "All_Games"
         const val MY_GAMES = "My_Games"
         const val GAME_DATA = "Game_Data"
+        const val PLAYERS = "Players"
+        const val CURRENT_PLAYERS = "currentPlayers"
     }
 }

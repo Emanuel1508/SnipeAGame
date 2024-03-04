@@ -23,8 +23,8 @@ class AvailableAchievementsFragment :
     private val viewModel: AvailableAchievementsViewModel by viewModels()
     private lateinit var adapter: AvailableAchievementsAdapter
     private lateinit var recyclerView: RecyclerView
-
     private val TAG = this::class.java.simpleName
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupObservers()

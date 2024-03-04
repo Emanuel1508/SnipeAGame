@@ -6,7 +6,7 @@ data class GameParameters(
     val time: String,
     val location: String,
     val numberOfPlayers: String,
-    val currentPlayers: Int
+    var currentPlayers: Int
 ) {
     constructor() : this(
         "",

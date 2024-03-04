@@ -1,10 +1,10 @@
 package com.example.snipeagame.ui.main.games.all_games
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.domain.models.GameParameters
+import com.example.domain.models.UserGameDataParameters
 import com.example.domain.usecases.GetGamesUseCase
 import com.example.domain.usecases.GetProfileDataForGamesUseCase
 import com.example.domain.usecases.GetUserIdUseCase
@@ -26,39 +26,61 @@ class AllGamesViewModel @Inject constructor(
 ) : BaseViewModel() {
     private val _games = MutableLiveData<List<GameParameters>>()
     val games: LiveData<List<GameParameters>> = _games
+    private lateinit var id: String
     private val TAG: String = this::class.java.simpleName
 
     init {
-        getGames()
+         getUserId()
     }
 
-    private fun getGames() {
+    private fun getUserId() {
+        when(val result = getUserIdUseCase()) {
+            is UseCaseResponse.Success -> {
+                getGames(result.body)
+                id = result.body
+            }
+            is UseCaseResponse.Failure -> onDataFailure(result.error)
+        }
+    }
+
+    private fun getGames(userId: String) {
         showLoading()
         viewModelScope.launch(Dispatchers.IO) {
-            when (val result = getGamesUseCase()) {
+            when (val result = getGamesUseCase(userId)) {
                 is UseCaseResponse.Success -> onGameDataSuccess(result.body)
                 is UseCaseResponse.Failure -> onDataFailure(result.error)
             }
         }
     }
 
-    fun onJoinGameButtonPress() {
+    fun onJoinGameButtonPress(game: GameParameters) {
         viewModelScope.launch(Dispatchers.IO) {
-            when (val result = getUserIdUseCase()) {
-                is UseCaseResponse.Success -> getUserGameData(result.body)
+           getUserGameData(id,game)
+        }
+    }
+
+    private fun getUserGameData(userId: String, game: GameParameters) {
+        showLoading()
+        viewModelScope.launch(Dispatchers.IO) {
+            when (val result = getProfileDataForGamesUseCase(userId)) {
+                is UseCaseResponse.Success -> {
+                    joinGame(game, result, userId)
+                }
+
                 is UseCaseResponse.Failure -> onDataFailure(result.error)
             }
         }
     }
 
-    private fun getUserGameData(userId: String) {
-        showLoading()
-        viewModelScope.launch(Dispatchers.IO) {
-            when (val result = getProfileDataForGamesUseCase(userId)) {
-                is UseCaseResponse.Success -> Log.v(TAG, "Succes: ${result.body}")
-                is UseCaseResponse.Failure -> showError(result.error)
-            }
-            hideLoading()
+    private suspend fun joinGame(
+        game: GameParameters,
+        result: UseCaseResponse.Success<UserGameDataParameters>,
+        userId: String
+    ) {
+        game.currentPlayers++
+        when (val response = joinGameUseCase(result.body, game, userId)) {
+            is UseCaseResponse.Success -> hideLoading()
+            is UseCaseResponse.Failure -> onDataFailure(response.error)
         }
     }
 

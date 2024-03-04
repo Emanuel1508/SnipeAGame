@@ -26,8 +26,8 @@ class RolesFragment : BaseFragment<FragmentRolesBinding>(FragmentRolesBinding::i
     private val viewModel: RolesViewModel by viewModels()
     private lateinit var adapter: RolesAdapter
     private lateinit var chosenFaction: String
-
     private val TAG = this::class.java.simpleName
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRoleViews()
