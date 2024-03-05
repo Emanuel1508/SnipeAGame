@@ -27,7 +27,6 @@ class GamesRepositoryImpl @Inject constructor(
             firestore.collection(DatabaseConstants.ALL_GAMES)
                 .document(gameData.gameId)
                 .set(gameData)
-
             UseCaseResponse.Success(StringConstants.SUCCESS)
         } catch (unknownHostException: UnknownHostException) {
             unknownHostException.getGamesError(ErrorMessage.NO_NETWORK)
@@ -52,7 +51,6 @@ class GamesRepositoryImpl @Inject constructor(
 
             val myGames = documentToGameObject(myGamesDocumentSnapshot)
             games = retainUnjoinedGames(games, myGames)
-
             UseCaseResponse.Success(games)
         } catch (unknownHostException: UnknownHostException) {
             unknownHostException.getGamesError(ErrorMessage.NO_NETWORK)
@@ -85,7 +83,8 @@ class GamesRepositoryImpl @Inject constructor(
                 .collection(DatabaseConstants.MY_GAMES)
                 .get()
                 .await()
-            val myGames = documentToGameObject(myGamesDocumentSnapshot)
+            var myGames = documentToGameObject(myGamesDocumentSnapshot)
+            myGames = syncPlayerNumbers(myGames)
             UseCaseResponse.Success(myGames)
         } catch (unknownHostException: UnknownHostException) {
             unknownHostException.getGamesError(ErrorMessage.NO_NETWORK)
@@ -126,29 +125,47 @@ class GamesRepositoryImpl @Inject constructor(
     private fun documentToGameObject(documents: QuerySnapshot): List<GameParameters> {
         val list: ArrayList<GameParameters> = ArrayList()
         for (document in documents) {
-            Log.v(TAG, document.toObject(GameParameters::class.java).toString())
             list.add(document.toObject(GameParameters::class.java))
         }
         return list
     }
 
-    private fun deleteGamesPastDate(games: List<GameParameters>): List<GameParameters> {
+    private suspend fun deleteGamesPastDate(games: List<GameParameters>): List<GameParameters> {
         games.forEach { game ->
+            val playerDocumentSnapshot = fetchPlayerDocuments(game)
+            val playerIds = getPlayerIds(playerDocumentSnapshot)
             val formattedGameDate = formatDateAndTime(game)
+
             if (formattedGameDate.before(Calendar.getInstance().time)) {
-                firestore.collection(DatabaseConstants.ALL_GAMES)
-                    .document(game.gameId)
-                    .delete()
+                deletePlayers(playerIds, game)
+                deleteGame(game)
             }
         }
         return games
     }
 
+    private suspend fun fetchPlayerDocuments(game: GameParameters): QuerySnapshot {
+        return firestore.collection(DatabaseConstants.ALL_GAMES)
+            .document(game.gameId)
+            .collection(DatabaseConstants.PLAYERS)
+            .get()
+            .await()
+    }
+
     private fun retainUnjoinedGames(
         joinedGames: List<GameParameters>,
         unjoinedGames: List<GameParameters>
-    ) = joinedGames.filterNot { it in unjoinedGames }
+    ) = joinedGames.filterNot { joinedGame ->
+        unjoinedGames.any {it.gameId == joinedGame.gameId}
+    }
 
+    private fun getPlayerIds(documents: QuerySnapshot): List<String> {
+        val playerId: ArrayList<String> = ArrayList()
+        for (document in documents) {
+            playerId.add(document.id)
+        }
+        return playerId
+    }
 
     private fun formatDateAndTime(game: GameParameters): Date {
         val dateFormatter = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
@@ -164,10 +181,41 @@ class GamesRepositoryImpl @Inject constructor(
                 calendar.set(Calendar.MINUTE, time.minutes)
             }
         }
-        val combinedDate = calendar.time
-        Log.v(TAG, combinedDate.toString())
+        return calendar.time
+    }
 
-        return combinedDate
+    private fun deletePlayers(
+        playerIds: List<String>,
+        game: GameParameters
+    ) {
+        playerIds.forEach { playerId ->
+            firestore.collection(DatabaseConstants.ALL_GAMES)
+                .document(game.gameId)
+                .collection(DatabaseConstants.PLAYERS)
+                .document(playerId)
+                .delete()
+        }
+    }
+
+    private fun deleteGame(game: GameParameters) {
+        firestore.collection(DatabaseConstants.ALL_GAMES)
+            .document(game.gameId)
+            .delete()
+    }
+
+    private suspend fun syncPlayerNumbers(games: List<GameParameters>): List<GameParameters> {
+        games.forEach { game ->
+            val formattedDate = formatDateAndTime(game)
+            if(formattedDate.after(Calendar.getInstance().time)) {
+                val document = firestore.collection(DatabaseConstants.ALL_GAMES)
+                    .document(game.gameId)
+                    .get()
+                    .await()
+                val number = document[DatabaseConstants.CURRENT_PLAYERS].toString()
+                game.currentPlayers = Integer.valueOf(number)
+            }
+        }
+        return games
     }
 
     private fun java.lang.Exception.getGamesError(error: ErrorMessage): UseCaseResponse.Failure {

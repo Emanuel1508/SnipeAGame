@@ -98,4 +98,5 @@
     <string name="join_game">JOIN GAME</string>
     <string name="player_faction">"Faction"</string>
     <string name="player_roles">Roles</string>
+    <string name="players">Players</string>
 </resources>

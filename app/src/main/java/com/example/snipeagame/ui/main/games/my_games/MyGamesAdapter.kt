@@ -8,6 +8,8 @@ import com.example.domain.models.GameParameters
 import com.example.domain.utils.NumberConstants
 import com.example.snipeagame.databinding.ItemGameBinding
 import com.example.snipeagame.utils.StringConstants
+import com.example.snipeagame.utils.disable
+import com.example.snipeagame.utils.hide
 
 class MyGamesAdapter(private val myGameClickListener: MyGameClickListener) :
     RecyclerView.Adapter<MyGamesAdapter.ViewHolder>() {
@@ -36,6 +38,8 @@ class MyGamesAdapter(private val myGameClickListener: MyGameClickListener) :
                 locationTextView.text = StringConstants.GAME_LOCATION + location
                 numberOfPlayersTextView.text =
                     "${StringConstants.PLAYERS}$currentPlayers/$numberOfPlayers"
+                button.hide()
+                button.disable()
             }
         }
     }
@@ -57,6 +61,7 @@ class MyGamesAdapter(private val myGameClickListener: MyGameClickListener) :
         val timeTextView = binding.gameTimeTextView
         val locationTextView = binding.gameLocationTextView
         val numberOfPlayersTextView = binding.gameNumberOfPlayersTextView
+        val button = binding.gameButton
     }
 
     interface MyGameClickListener {

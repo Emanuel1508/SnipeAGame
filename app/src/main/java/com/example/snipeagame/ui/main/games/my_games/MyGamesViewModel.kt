@@ -22,6 +22,7 @@ class MyGamesViewModel @Inject constructor(
     BaseViewModel() {
     private val _myGames = MutableLiveData<List<GameParameters>>()
     val myGames: LiveData<List<GameParameters>> = _myGames
+    private val TAG: String = this::class.java.simpleName
 
     init {
         getUserId()
@@ -39,7 +40,7 @@ class MyGamesViewModel @Inject constructor(
     private fun getMyGames(userId: String) {
         showLoading()
         viewModelScope.launch(Dispatchers.IO) {
-            when(val gamesResult = getMyGamesUseCase(userId)) {
+            when (val gamesResult = getMyGamesUseCase(userId)) {
                 is UseCaseResponse.Success -> onGameDataSuccess(gamesResult.body)
                 is UseCaseResponse.Failure -> onDataFailure(gamesResult.error)
             }

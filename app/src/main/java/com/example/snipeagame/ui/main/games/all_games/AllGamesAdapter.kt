@@ -8,6 +8,7 @@ import com.example.domain.models.GameParameters
 import com.example.domain.utils.NumberConstants
 import com.example.snipeagame.databinding.ItemGameBinding
 import com.example.snipeagame.utils.StringConstants
+import com.example.snipeagame.utils.disable
 
 class AllGamesAdapter(private val gameClickListener: GameClickListener) :
     RecyclerView.Adapter<AllGamesAdapter.ViewHolder>() {
@@ -38,7 +39,7 @@ class AllGamesAdapter(private val gameClickListener: GameClickListener) :
         val timeTextView = binding.gameTimeTextView
         val locationTextView = binding.gameLocationTextView
         val numberOfPlayersTextView = binding.gameNumberOfPlayersTextView
-        val button = binding.joinGameButton
+        val button = binding.gameButton
     }
 
     @SuppressLint("SetTextI18n")
@@ -48,7 +49,12 @@ class AllGamesAdapter(private val gameClickListener: GameClickListener) :
                 dateTextView.text = StringConstants.GAME_DATE + date
                 timeTextView.text = StringConstants.GAME_TIME + time
                 locationTextView.text = StringConstants.GAME_LOCATION + location
-                numberOfPlayersTextView.text = "${StringConstants.PLAYERS}$currentPlayers/$numberOfPlayers"
+                numberOfPlayersTextView.text =
+                    "${StringConstants.PLAYERS}$currentPlayers/$numberOfPlayers"
+                if (currentPlayers == numberOfPlayers.toInt()) {
+                    button.text = StringConstants.MAX_ROOM
+                    button.disable()
+                }
             }
         }
     }

@@ -12,5 +12,6 @@ class StringConstants {
         const val GAME_TIME = "Game Time: "
         const val GAME_LOCATION = "Game Location: "
         const val PLAYERS = "Players: "
+        const val MAX_ROOM = "LIMIT REACHED"
     }
 }
