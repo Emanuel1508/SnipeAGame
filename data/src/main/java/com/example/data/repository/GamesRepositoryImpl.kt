@@ -1,6 +1,5 @@
 package com.example.data.repository
 
-import android.util.Log
 import com.example.data.utils.DatabaseConstants
 import com.example.data.utils.StringConstants
 import com.example.domain.models.GameParameters
@@ -41,7 +40,7 @@ class GamesRepositoryImpl @Inject constructor(
                 .get()
                 .await()
             var games = documentToGameObject(gamesDocumentSnapshot)
-            games = deleteGamesPastDate(games)
+            games = deleteGamesPastDate(games.toMutableList())
 
             val myGamesDocumentSnapshot = firestore.collection(DatabaseConstants.PROFILES)
                 .document(userId)
@@ -130,7 +129,7 @@ class GamesRepositoryImpl @Inject constructor(
         return list
     }
 
-    private suspend fun deleteGamesPastDate(games: List<GameParameters>): List<GameParameters> {
+    private suspend fun deleteGamesPastDate(games: MutableList<GameParameters>): List<GameParameters> {
         games.forEach { game ->
             val playerDocumentSnapshot = fetchPlayerDocuments(game)
             val playerIds = getPlayerIds(playerDocumentSnapshot)
@@ -139,6 +138,7 @@ class GamesRepositoryImpl @Inject constructor(
             if (formattedGameDate.before(Calendar.getInstance().time)) {
                 deletePlayers(playerIds, game)
                 deleteGame(game)
+                games.remove(game)
             }
         }
         return games
@@ -156,7 +156,7 @@ class GamesRepositoryImpl @Inject constructor(
         joinedGames: List<GameParameters>,
         unjoinedGames: List<GameParameters>
     ) = joinedGames.filterNot { joinedGame ->
-        unjoinedGames.any {it.gameId == joinedGame.gameId}
+        unjoinedGames.any { it.gameId == joinedGame.gameId }
     }
 
     private fun getPlayerIds(documents: QuerySnapshot): List<String> {
@@ -206,7 +206,7 @@ class GamesRepositoryImpl @Inject constructor(
     private suspend fun syncPlayerNumbers(games: List<GameParameters>): List<GameParameters> {
         games.forEach { game ->
             val formattedDate = formatDateAndTime(game)
-            if(formattedDate.after(Calendar.getInstance().time)) {
+            if (formattedDate.after(Calendar.getInstance().time)) {
                 val document = firestore.collection(DatabaseConstants.ALL_GAMES)
                     .document(game.gameId)
                     .get()
