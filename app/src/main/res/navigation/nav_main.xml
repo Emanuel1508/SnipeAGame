@@ -11,6 +11,13 @@
         <action
             android:id="@+id/action_games_fragment_to_createGameFragment"
             app:destination="@id/createGameFragment" />
+        <action
+            android:id="@+id/action_games_fragment_to_myGameDetailsFragment"
+            app:destination="@id/myGameDetailsFragment">
+            <argument
+                android:name="gameId"
+                app:argType="string"/>
+        </action>
     </fragment>
     <fragment
         android:id="@+id/myProfile_fragment"
@@ -35,5 +42,16 @@
         <action
             android:id="@+id/action_createGameFragment_to_games_fragment"
             app:destination="@id/games_fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/myGameDetailsFragment"
+        android:name="com.example.snipeagame.ui.main.games.my_games.my_game_details.MyGameDetailsFragment"
+        android:label="MyGameDetailsFragment" >
+        <action
+            android:id="@+id/action_myGameDetailsFragment_to_games_fragment"
+            app:destination="@id/games_fragment" />
+        <argument
+            android:name="gameId"
+            app:argType="string" />
     </fragment>
 </navigation>

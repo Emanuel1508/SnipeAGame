@@ -3,6 +3,7 @@ package com.example.snipeagame.ui.main.games.my_games
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.models.GameParameters
 import com.example.domain.models.Result
@@ -10,6 +11,7 @@ import com.example.domain.utils.ErrorMessage
 import com.example.snipeagame.R
 import com.example.snipeagame.base.BaseFragment
 import com.example.snipeagame.databinding.FragmentMyGamesBinding
+import com.example.snipeagame.ui.main.games.GamesFragmentDirections
 import com.example.snipeagame.utils.AlertDialogFragment
 import com.example.snipeagame.utils.hideRefresh
 import com.example.snipeagame.utils.mapToUI
@@ -32,7 +34,7 @@ class MyGamesFragment : BaseFragment<FragmentMyGamesBinding>(FragmentMyGamesBind
     private fun setupAdapter() {
         adapter = MyGamesAdapter(object : MyGamesAdapter.MyGameClickListener {
             override fun onMyGameClick(game: GameParameters) {
-                TODO("Not yet implemented")
+                navigateToGameDetails(game)
             }
         })
         recyclerView = binding.myGamesRecyclerView
@@ -62,6 +64,14 @@ class MyGamesFragment : BaseFragment<FragmentMyGamesBinding>(FragmentMyGamesBind
 
     private fun showLoadingAnimation() = binding.myGamesSwipeRefresh.showRefresh()
     private fun hideLoadingAnimation() = binding.myGamesSwipeRefresh.hideRefresh()
+
+    private fun navigateToGameDetails(game: GameParameters) {
+        findNavController().navigate(
+            GamesFragmentDirections.actionGamesFragmentToMyGameDetailsFragment(
+                game.gameId
+            )
+        )
+    }
 
     private fun showAlertDialog(error: ErrorMessage) {
         val alertDialogFragment =

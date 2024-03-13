@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/size_16"
             android:background="@drawable/profile_white_background"
-            android:padding="@dimen/size_8"
+            android:padding="@dimen/size_16"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/player_endGuideline"
             app:layout_constraintStart_toEndOf="@id/player_startGuideline"
@@ -72,7 +72,7 @@
                 android:layout_width="@dimen/size_80"
                 android:layout_height="@dimen/size_64"
                 android:layout_marginBottom="@dimen/size_8"
-                app:cardCornerRadius="@dimen/size_100"
+                app:cardCornerRadius="@dimen/size_16"
                 app:layout_constraintEnd_toEndOf="@id/player_middleGuideline"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/playerFaction_textView">
@@ -92,7 +92,7 @@
                 android:layout_height="@dimen/size_64"
                 android:layout_marginStart="@dimen/size_8"
                 android:layout_marginBottom="@dimen/size_8"
-                app:cardCornerRadius="@dimen/size_100"
+                app:cardCornerRadius="@dimen/size_16"
                 app:layout_constraintStart_toStartOf="@id/player_middleGuideline"
                 app:layout_constraintTop_toBottomOf="@id/playerFaction_textView">
 
@@ -109,7 +109,7 @@
                 android:layout_height="@dimen/size_64"
                 android:layout_marginStart="@dimen/size_8"
                 android:layout_marginBottom="@dimen/size_8"
-                app:cardCornerRadius="@dimen/size_100"
+                app:cardCornerRadius="@dimen/size_16"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/firstRole_cardView"
                 app:layout_constraintTop_toBottomOf="@id/playerFaction_textView">
@@ -126,7 +126,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.5" />
+                app:layout_constraintGuide_percent="0.40" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

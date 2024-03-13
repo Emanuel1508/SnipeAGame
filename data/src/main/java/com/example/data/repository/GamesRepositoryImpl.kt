@@ -92,6 +92,22 @@ class GamesRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getPlayers(gameId: String): UseCaseResponse<List<UserGameDataParameters>> {
+        return try {
+            val playersDocumentSnapshot = firestore.collection(DatabaseConstants.ALL_GAMES)
+                .document(gameId)
+                .collection(DatabaseConstants.PLAYERS)
+                .get()
+                .await()
+            val players = documentToPlayerObject(playersDocumentSnapshot)
+            UseCaseResponse.Success(players)
+        } catch (unknownHostException: UnknownHostException) {
+            unknownHostException.getGamesError(ErrorMessage.NO_NETWORK)
+        } catch (exception: Exception) {
+            exception.getGamesError(ErrorMessage.GENERAL)
+        }
+    }
+
     private fun saveUserToAllGames(
         user: UserGameDataParameters,
         game: GameParameters,
@@ -216,6 +232,15 @@ class GamesRepositoryImpl @Inject constructor(
             }
         }
         return games
+    }
+
+    private fun documentToPlayerObject(players: QuerySnapshot)
+            : List<UserGameDataParameters> {
+        val playerList: ArrayList<UserGameDataParameters> = ArrayList()
+        for (player in players) {
+            playerList.add(player.toObject(UserGameDataParameters::class.java))
+        }
+        return playerList
     }
 
     private fun java.lang.Exception.getGamesError(error: ErrorMessage): UseCaseResponse.Failure {

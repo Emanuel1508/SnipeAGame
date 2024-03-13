@@ -13,5 +13,11 @@ class StringConstants {
         const val GAME_LOCATION = "Game Location: "
         const val PLAYERS = "Players: "
         const val MAX_ROOM = "LIMIT REACHED"
+        const val DESIGNATED_MARKSMAN = "Designated Marksman"
+        const val MACHINE_GUNNER = "Machine Gunner"
+        const val ASSAULT_RIFLEMAN = "Assault Rifleman"
+        const val GRENADIER = "Grenadier"
+        const val MEDIC = "Medic"
+        const val BREACHER = "Breacher"
     }
 }
