@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.models.Result
@@ -34,6 +35,7 @@ class MyGameDetailsFragment :
         passGameId(gameId)
         setupAdapter()
         setupObservers()
+        setupListeners()
     }
 
     private fun setupAdapter() {
@@ -50,6 +52,12 @@ class MyGameDetailsFragment :
         gameId = args.gameId
     }
 
+    private fun setupListeners() {
+        binding.leaveGameButton.setOnClickListener {
+            viewModel.leaveGame()
+        }
+    }
+
     private fun setupObservers() {
         with(viewModel) {
             loadingLiveData.observe(viewLifecycleOwner) {
@@ -57,6 +65,14 @@ class MyGameDetailsFragment :
             }
             errorLiveData.observe(viewLifecycleOwner) { error ->
                 showAlertDialog(error.message)
+            }
+            navigation.observe(viewLifecycleOwner) { destination ->
+                when (destination) {
+                    is MyGameDetailsViewModel.LeaveGameRedirect.GameFragment -> findNavController()
+                        .navigate(
+                            MyGameDetailsFragmentDirections.actionMyGameDetailsFragmentToGamesFragment()
+                        )
+                }
             }
         }
     }

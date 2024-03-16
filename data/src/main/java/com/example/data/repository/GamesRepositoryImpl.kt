@@ -108,6 +108,28 @@ class GamesRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun leaveGame(userId: String, gameId: String): UseCaseResponse<String> {
+        return try {
+            removeLeftGame(userId, gameId)
+            removePlayer(gameId, userId)
+            decreasePlayerNumbers(gameId)
+
+            UseCaseResponse.Success(StringConstants.SUCCESS)
+        } catch (unknownHostException: UnknownHostException) {
+            unknownHostException.getGamesError(ErrorMessage.NO_NETWORK)
+        } catch (exception: Exception) {
+            exception.getGamesError(ErrorMessage.GENERAL)
+        }
+    }
+
+    private fun removeLeftGame(userId: String, gameId: String) {
+        firestore.collection(DatabaseConstants.PROFILES)
+            .document(userId)
+            .collection(DatabaseConstants.MY_GAMES)
+            .document(gameId)
+            .delete()
+    }
+
     private fun saveUserToAllGames(
         user: UserGameDataParameters,
         game: GameParameters,
@@ -213,6 +235,14 @@ class GamesRepositoryImpl @Inject constructor(
         }
     }
 
+    private fun removePlayer(gameId: String, userId: String) {
+        firestore.collection(DatabaseConstants.ALL_GAMES)
+            .document(gameId)
+            .collection(DatabaseConstants.PLAYERS)
+            .document(userId)
+            .delete()
+    }
+
     private fun deleteGame(game: GameParameters) {
         firestore.collection(DatabaseConstants.ALL_GAMES)
             .document(game.gameId)
@@ -232,6 +262,25 @@ class GamesRepositoryImpl @Inject constructor(
             }
         }
         return games
+    }
+
+    private suspend fun decreasePlayerNumbers(gameId: String) {
+        val numberOfPlayers = getPlayerCount(gameId)
+        firestore.collection(DatabaseConstants.ALL_GAMES)
+            .document(gameId)
+            .update(DatabaseConstants.CURRENT_PLAYERS, numberOfPlayers)
+    }
+
+    private suspend fun getPlayerCount(gameId: String): Long? {
+        val documentSnapshot = firestore.collection(DatabaseConstants.ALL_GAMES)
+            .document(gameId)
+            .get()
+            .await()
+        var numberOfPlayers = documentSnapshot.getLong(DatabaseConstants.CURRENT_PLAYERS)
+        if (numberOfPlayers != null) {
+            numberOfPlayers -= 1
+        }
+        return numberOfPlayers
     }
 
     private fun documentToPlayerObject(players: QuerySnapshot)

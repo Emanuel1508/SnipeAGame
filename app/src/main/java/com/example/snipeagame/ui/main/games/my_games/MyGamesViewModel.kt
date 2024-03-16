@@ -29,6 +29,7 @@ class MyGamesViewModel @Inject constructor(
     }
 
     private fun getUserId() {
+        showLoading()
         viewModelScope.launch(Dispatchers.IO) {
             when (val result = getUserIdUseCase()) {
                 is UseCaseResponse.Success -> getMyGames(result.body)
@@ -38,7 +39,6 @@ class MyGamesViewModel @Inject constructor(
     }
 
     private fun getMyGames(userId: String) {
-        showLoading()
         viewModelScope.launch(Dispatchers.IO) {
             when (val gamesResult = getMyGamesUseCase(userId)) {
                 is UseCaseResponse.Success -> onGameDataSuccess(gamesResult.body)

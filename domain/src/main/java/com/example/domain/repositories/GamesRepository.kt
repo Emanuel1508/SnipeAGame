@@ -18,4 +18,6 @@ interface GamesRepository {
     suspend fun getMyGames(userId: String): UseCaseResponse<List<GameParameters>>
 
     suspend fun getPlayers(gameId: String): UseCaseResponse<List<UserGameDataParameters>>
+
+    suspend fun leaveGame(userId: String, gameId: String): UseCaseResponse<String>
 }
