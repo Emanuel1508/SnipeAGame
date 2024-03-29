@@ -19,4 +19,6 @@ interface UserRepository {
     suspend fun getProfileData(userId: String): UseCaseResponse<UserDataParameters>
 
     suspend fun getProfileDataForGames(userId: String): UseCaseResponse<UserGameDataParameters>
+
+    suspend fun updateStats(takedowns: Int, userId: String): UseCaseResponse<String>
 }

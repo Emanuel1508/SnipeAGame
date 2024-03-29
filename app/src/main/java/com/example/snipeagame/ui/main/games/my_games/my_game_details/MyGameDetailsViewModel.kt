@@ -26,6 +26,8 @@ class MyGameDetailsViewModel @Inject constructor(
     val playerList: LiveData<List<UserGameDataParameters>> = _playerList
     private val _navigation = SingleLiveEvent<LeaveGameRedirect>()
     val navigation: LiveData<LeaveGameRedirect> = _navigation
+    private val _gameState = MutableLiveData<UiState>()
+    val gameState: LiveData<UiState> = _gameState
     private var gameId: String = ""
     private val TAG = this::class.java.simpleName
 
@@ -47,9 +49,11 @@ class MyGameDetailsViewModel @Inject constructor(
                         is UseCaseResponse.Success -> _navigation.postValue(
                             LeaveGameRedirect.GameFragment
                         )
+
                         is UseCaseResponse.Failure -> onDataFailure(response.error)
                     }
                 }
+
                 is UseCaseResponse.Failure -> onDataFailure(result.error)
             }
         }
@@ -69,7 +73,16 @@ class MyGameDetailsViewModel @Inject constructor(
         }
     }
 
+    fun updateMyGamesUI(isGameCompleted: Boolean) {
+        _gameState.value = if (isGameCompleted) UiState.GameCompleted else UiState.GameInProgress
+    }
+
     sealed class LeaveGameRedirect {
         data object GameFragment : LeaveGameRedirect()
+    }
+
+    sealed class UiState {
+        data object GameInProgress : UiState()
+        data object GameCompleted : UiState()
     }
 }

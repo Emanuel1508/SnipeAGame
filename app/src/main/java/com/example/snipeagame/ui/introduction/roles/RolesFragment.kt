@@ -30,6 +30,7 @@ class RolesFragment : BaseFragment<FragmentRolesBinding>(FragmentRolesBinding::i
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        hideLoadingAnimation()
         setupRoleViews()
         setupAdapter()
         setupObservers()

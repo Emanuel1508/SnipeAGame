@@ -104,12 +104,52 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun updateStats(takedowns: Int, userId: String): UseCaseResponse<String> {
+        return try {
+            getPlayerStats(takedowns, userId)
+            UseCaseResponse.Success(StringConstants.SUCCESS)
+        } catch (unknownHostException: UnknownHostException) {
+            unknownHostException.getUserError(ErrorMessage.NO_NETWORK)
+        } catch (exception: Exception) {
+            exception.getUserError(ErrorMessage.GENERAL)
+        }
+    }
+
     private fun documentToUserGameData(document: DocumentSnapshot): UserGameDataParameters {
         val profileData = document.toObject(UserGameDataParameters::class.java)
-        if(profileData != null) {
+        if (profileData != null) {
             return profileData
         }
         return UserGameDataParameters()
+    }
+
+    private suspend fun getPlayerStats(takedowns: Int, userId: String) {
+        val playerDocumentSnapshot = firestore.collection(DatabaseConstants.PROFILES)
+            .document(userId)
+            .get()
+            .await()
+        var playerTakedowns = playerDocumentSnapshot.getLong(DatabaseConstants.TAKEDOWNS)
+        var playerGamesCount = playerDocumentSnapshot.getLong(DatabaseConstants.GAME_COUNT)
+        playerGamesCount?.let {
+            playerGamesCount++
+        }
+        playerTakedowns?.let {
+            playerTakedowns += takedowns
+        }
+        if (playerGamesCount != null && playerTakedowns != null) {
+            updatePlayerStats(userId, playerGamesCount.toInt(), playerTakedowns.toInt())
+        }
+    }
+
+    private fun updatePlayerStats(userId: String, gameCount: Int, takedowns: Int) {
+        firestore.collection(DatabaseConstants.PROFILES)
+            .document(userId)
+            .update(
+                mapOf(
+                    DatabaseConstants.TAKEDOWNS to takedowns,
+                    DatabaseConstants.GAME_COUNT to gameCount
+                )
+            )
     }
 
     private fun java.lang.Exception.getUserError(error: ErrorMessage): UseCaseResponse.Failure {

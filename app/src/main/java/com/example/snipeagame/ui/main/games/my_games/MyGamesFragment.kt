@@ -13,6 +13,7 @@ import com.example.snipeagame.base.BaseFragment
 import com.example.snipeagame.databinding.FragmentMyGamesBinding
 import com.example.snipeagame.ui.main.games.GamesFragmentDirections
 import com.example.snipeagame.utils.AlertDialogFragment
+import com.example.snipeagame.utils.GameCompleteDialogFragment
 import com.example.snipeagame.utils.hideRefresh
 import com.example.snipeagame.utils.mapToUI
 import com.example.snipeagame.utils.showRefresh
@@ -35,6 +36,10 @@ class MyGamesFragment : BaseFragment<FragmentMyGamesBinding>(FragmentMyGamesBind
         adapter = MyGamesAdapter(object : MyGamesAdapter.MyGameClickListener {
             override fun onMyGameClick(game: GameParameters) {
                 navigateToGameDetails(game)
+            }
+
+            override fun onFinishGameClick(game: GameParameters) {
+                showGameCompleteDialog(game)
             }
         })
         recyclerView = binding.myGamesRecyclerView
@@ -66,9 +71,16 @@ class MyGamesFragment : BaseFragment<FragmentMyGamesBinding>(FragmentMyGamesBind
     private fun hideLoadingAnimation() = binding.myGamesSwipeRefresh.hideRefresh()
 
     private fun navigateToGameDetails(game: GameParameters) {
+        var isGameCompleted: Boolean
+
+        with(viewModel) {
+            val gameDate = formatDateAndTime(game)
+            isGameCompleted = checkGamePastDue(gameDate)
+        }
         findNavController().navigate(
             GamesFragmentDirections.actionGamesFragmentToMyGameDetailsFragment(
-                game.gameId
+                game.gameId,
+                isGameCompleted
             )
         )
     }
@@ -79,5 +91,18 @@ class MyGamesFragment : BaseFragment<FragmentMyGamesBinding>(FragmentMyGamesBind
                 description = getString(error.mapToUI()),
                 onRetryClick = {})
         alertDialogFragment.show(parentFragmentManager, TAG)
+    }
+
+    private fun showGameCompleteDialog(game: GameParameters) {
+        val onSubmit: (String) -> Unit = { inputText ->
+            viewModel.onGameFinish(inputText, game)
+            adapter.finishGame(game)
+        }
+        val gameCompleteDialogFragment =
+            GameCompleteDialogFragment.newInstance(
+                onSubmitClick = onSubmit,
+                playerCount = game.currentPlayers
+            )
+        gameCompleteDialogFragment.show(parentFragmentManager, TAG)
     }
 }

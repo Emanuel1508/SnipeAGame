@@ -100,8 +100,8 @@
                     app:layout_constraintGuide_percent="0.95" />
 
                 <androidx.appcompat.widget.LinearLayoutCompat
-                    android:layout_width="@dimen/size_104"
-                    android:layout_height="@dimen/size_130"
+                    android:layout_width="@dimen/size_120"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/size_8"
                     android:background="@drawable/grey_background"
                     android:elevation="@dimen/size_1"
@@ -140,7 +140,7 @@
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="@dimen/size_104"
-                    android:layout_height="@dimen/size_130"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/size_8"
                     android:background="@drawable/grey_background"
                     android:elevation="@dimen/size_1"

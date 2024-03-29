@@ -8,8 +8,12 @@ import com.example.domain.models.GameParameters
 import com.example.domain.utils.NumberConstants
 import com.example.snipeagame.databinding.ItemGameBinding
 import com.example.snipeagame.utils.StringConstants
+import com.example.snipeagame.utils.convertDate
 import com.example.snipeagame.utils.disable
+import com.example.snipeagame.utils.enable
 import com.example.snipeagame.utils.hide
+import com.example.snipeagame.utils.show
+import java.util.Calendar
 
 class MyGamesAdapter(private val myGameClickListener: MyGameClickListener) :
     RecyclerView.Adapter<MyGamesAdapter.ViewHolder>() {
@@ -38,8 +42,15 @@ class MyGamesAdapter(private val myGameClickListener: MyGameClickListener) :
                 locationTextView.text = StringConstants.GAME_LOCATION + location
                 numberOfPlayersTextView.text =
                     "${StringConstants.PLAYERS}$currentPlayers/$numberOfPlayers"
-                button.hide()
-                button.disable()
+
+                if (verifyDate(game)) {
+                    button.text = StringConstants.FINISH_GAME
+                    button.show()
+                    button.enable()
+                } else {
+                    button.hide()
+                    button.disable()
+                }
             }
         }
     }
@@ -50,10 +61,24 @@ class MyGamesAdapter(private val myGameClickListener: MyGameClickListener) :
         notifyItemChanged(NumberConstants.ZERO, myGames.size)
     }
 
+    fun finishGame(game: GameParameters) {
+        val position = myGames.indexOf(game)
+        myGames.remove(game)
+        notifyItemRemoved(position)
+    }
+
     private fun setupListener(holder: ViewHolder, game: GameParameters) {
         holder.itemView.setOnClickListener {
             myGameClickListener.onMyGameClick(game)
         }
+        holder.button.setOnClickListener {
+            myGameClickListener.onFinishGameClick(game)
+        }
+    }
+
+    private fun verifyDate(game: GameParameters): Boolean {
+        val formattedDate = convertDate(game)
+        return formattedDate.before(Calendar.getInstance().time)
     }
 
     class ViewHolder(binding: ItemGameBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -66,5 +91,6 @@ class MyGamesAdapter(private val myGameClickListener: MyGameClickListener) :
 
     interface MyGameClickListener {
         fun onMyGameClick(game: GameParameters)
+        fun onFinishGameClick(game: GameParameters)
     }
 }

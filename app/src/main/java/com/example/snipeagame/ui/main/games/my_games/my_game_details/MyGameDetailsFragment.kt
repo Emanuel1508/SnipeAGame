@@ -13,8 +13,10 @@ import com.example.snipeagame.R
 import com.example.snipeagame.base.BaseFragment
 import com.example.snipeagame.databinding.FragmentMyGameDetailsBinding
 import com.example.snipeagame.utils.AlertDialogFragment
+import com.example.snipeagame.utils.hide
 import com.example.snipeagame.utils.hideRefresh
 import com.example.snipeagame.utils.mapToUI
+import com.example.snipeagame.utils.show
 import com.example.snipeagame.utils.showRefresh
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -27,29 +29,38 @@ class MyGameDetailsFragment :
     private lateinit var adapter: MyGameDetailsAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var gameId: String
+    private var isGameCompleted: Boolean = false
     private val TAG = this::class.java.simpleName
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getGameId()
+        checkIsGameCompleted()
         passGameId(gameId)
+        setUI()
         setupAdapter()
         setupObservers()
         setupListeners()
+    }
+
+    private fun setUI() {
+        viewModel.updateMyGamesUI(isGameCompleted)
     }
 
     private fun setupAdapter() {
         adapter = MyGameDetailsAdapter()
         recyclerView = binding.gameDetailRecyclerView
         recyclerView.adapter = adapter
-        viewModel.playerList.observe(viewLifecycleOwner) { players ->
-            adapter.setPlayers(players)
-        }
     }
 
     private fun getGameId() {
         val args: MyGameDetailsFragmentArgs by navArgs()
         gameId = args.gameId
+    }
+
+    private fun checkIsGameCompleted() {
+        val args: MyGameDetailsFragmentArgs by navArgs()
+        isGameCompleted = args.gameComplete
     }
 
     private fun setupListeners() {
@@ -72,6 +83,25 @@ class MyGameDetailsFragment :
                         .navigate(
                             MyGameDetailsFragmentDirections.actionMyGameDetailsFragmentToGamesFragment()
                         )
+                }
+            }
+            gameState.observe(viewLifecycleOwner) { gameStatus ->
+                when (gameStatus) {
+                    is MyGameDetailsViewModel.UiState.GameInProgress -> {
+                        playerList.observe(
+                            viewLifecycleOwner
+                        ) { players ->
+                            adapter.setPlayers(players)
+                        }
+                    }
+
+                    is MyGameDetailsViewModel.UiState.GameCompleted -> {
+                        with(binding) {
+                            gameCompleteTextView.show()
+                            leaveGameButton.hide()
+                            gameDetailHeaderTextView.hide()
+                        }
+                    }
                 }
             }
         }

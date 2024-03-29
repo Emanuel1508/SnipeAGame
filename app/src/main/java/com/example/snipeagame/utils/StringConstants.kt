@@ -6,6 +6,8 @@ class StringConstants {
         const val TITLE = "TITLE"
         const val DESCRIPTION = "DESCRIPTION"
         const val CALLBACK_RETRY = "CALLBACK_RETRY"
+        const val CALLBACK_SUBMIT = "CALLBACK_SUBMIT"
+        const val PLAYER_COUNT = "Players"
         const val AIRBORNE = "Airborne"
         const val IMMORTALS = "Immortals"
         const val GAME_DATE = "Game Date: "
@@ -19,5 +21,6 @@ class StringConstants {
         const val GRENADIER = "Grenadier"
         const val MEDIC = "Medic"
         const val BREACHER = "Breacher"
+        const val FINISH_GAME = "Finish Game"
     }
 }

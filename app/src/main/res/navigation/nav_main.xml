@@ -17,6 +17,9 @@
             <argument
                 android:name="gameId"
                 app:argType="string"/>
+            <argument
+                android:name="gameComplete"
+                app:argType="boolean"/>
         </action>
     </fragment>
     <fragment
@@ -53,5 +56,8 @@
         <argument
             android:name="gameId"
             app:argType="string" />
+        <argument
+            android:name="gameComplete"
+            app:argType="boolean"/>
     </fragment>
 </navigation>

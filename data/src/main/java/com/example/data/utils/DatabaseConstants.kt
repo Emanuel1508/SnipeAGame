@@ -9,8 +9,9 @@ class DatabaseConstants {
         const val MY_ACHIEVEMENTS = "My_Achievements"
         const val ALL_GAMES = "All_Games"
         const val MY_GAMES = "My_Games"
-        const val GAME_DATA = "Game_Data"
         const val PLAYERS = "Players"
         const val CURRENT_PLAYERS = "currentPlayers"
+        const val TAKEDOWNS = "takedowns"
+        const val GAME_COUNT = "games"
     }
 }

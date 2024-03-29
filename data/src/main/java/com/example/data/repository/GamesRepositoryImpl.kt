@@ -122,6 +122,22 @@ class GamesRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun finishGame(userId: String, gameId: String): UseCaseResponse<String> {
+        return try {
+            firestore.collection(DatabaseConstants.PROFILES)
+                .document(userId)
+                .collection(DatabaseConstants.MY_GAMES)
+                .document(gameId)
+                .delete()
+
+            UseCaseResponse.Success(StringConstants.SUCCESS)
+        } catch (unknownHostException: UnknownHostException) {
+            unknownHostException.getGamesError(ErrorMessage.NO_NETWORK)
+        } catch (exception: Exception) {
+            exception.getGamesError(ErrorMessage.GENERAL)
+        }
+    }
+
     private fun removeLeftGame(userId: String, gameId: String) {
         firestore.collection(DatabaseConstants.PROFILES)
             .document(userId)

@@ -12,7 +12,6 @@ import com.example.snipeagame.utils.StringConstants
 class MyGameDetailsAdapter : RecyclerView.Adapter<MyGameDetailsAdapter.ViewHolder>() {
     private var myGamesDetails = mutableListOf<UserGameDataParameters>()
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemPlayerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)

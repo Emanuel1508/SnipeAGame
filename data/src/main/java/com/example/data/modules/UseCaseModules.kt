@@ -6,6 +6,7 @@ import com.example.domain.repositories.GamesRepository
 import com.example.domain.repositories.UserRepository
 import com.example.domain.usecases.CreateGameUseCase
 import com.example.domain.usecases.CreateUserUseCase
+import com.example.domain.usecases.FinishGameUseCase
 import com.example.domain.usecases.GetAvailableAchievementsUseCase
 import com.example.domain.usecases.GetFactionUseCase
 import com.example.domain.usecases.GetGamesUseCase
@@ -21,6 +22,7 @@ import com.example.domain.usecases.UnlockAchievementUseCase
 import com.example.domain.usecases.UpdateUserGroupsUseCase
 import com.example.domain.usecases.UserLoginUseCase
 import com.example.domain.usecases.UserRegisterUseCase
+import com.example.domain.usecases.UserUpdateStatsUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -114,4 +116,14 @@ object UseCaseModules {
     @Provides
     fun provideLeaveGameUseCase(repository: GamesRepository) =
         LeaveGameUseCase(repository)
+
+    @Singleton
+    @Provides
+    fun provideUserUpdateStatsUseCase(repository: UserRepository) =
+        UserUpdateStatsUseCase(repository)
+
+    @Singleton
+    @Provides
+    fun provideFinishGameUseCase(repository: GamesRepository) =
+        FinishGameUseCase(repository)
 }
