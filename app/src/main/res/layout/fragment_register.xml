@@ -109,7 +109,7 @@
                 style="@style/InputText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text" />
+                android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -127,8 +127,28 @@
                 style="@style/InputText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text" />
+                android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/privacy_checkBox"
+            style="@style/RegisterPrivacyText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/register_button"
+            app:layout_constraintStart_toStartOf="@id/startRegister_guideline"
+            app:layout_constraintTop_toBottomOf="@id/confirmPassword_InputLayout" />
+
+        <TextView
+            android:id="@+id/privacy_textView"
+            style="@style/RegisterPrivacyText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/size_8"
+            android:text="@string/privacy_policy"
+            app:layout_constraintBottom_toTopOf="@id/register_button"
+            app:layout_constraintStart_toEndOf="@id/privacy_checkBox"
+            app:layout_constraintTop_toBottomOf="@id/confirmPassword_InputLayout" />
 
         <Button
             android:id="@+id/register_button"
@@ -141,7 +161,7 @@
             android:textAllCaps="true"
             app:layout_constraintEnd_toEndOf="@id/endRegister_guideline"
             app:layout_constraintStart_toStartOf="@id/startRegister_guideline"
-            app:layout_constraintTop_toBottomOf="@id/confirmPassword_InputLayout" />
+            app:layout_constraintTop_toBottomOf="@id/privacy_checkBox" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/topRegister_guideline"
@@ -149,7 +169,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintGuide_percent="0.2"
+            app:layout_constraintGuide_percent="0.15"
             app:layout_constraintStart_toStartOf="parent" />
 
         <androidx.constraintlayout.widget.Guideline

@@ -7,17 +7,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
-import com.example.domain.models.Result
 import com.example.domain.utils.ErrorMessage
 import com.example.snipeagame.R
 import com.example.snipeagame.base.BaseFragment
 import com.example.snipeagame.databinding.FragmentMyGameDetailsBinding
 import com.example.snipeagame.utils.AlertDialogFragment
 import com.example.snipeagame.utils.hide
-import com.example.snipeagame.utils.hideRefresh
 import com.example.snipeagame.utils.mapToUI
 import com.example.snipeagame.utils.show
-import com.example.snipeagame.utils.showRefresh
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -41,6 +38,7 @@ class MyGameDetailsFragment :
         setupAdapter()
         setupObservers()
         setupListeners()
+        setupLoading()
     }
 
     private fun setUI() {
@@ -64,16 +62,20 @@ class MyGameDetailsFragment :
     }
 
     private fun setupListeners() {
-        binding.leaveGameButton.setOnClickListener {
-            viewModel.leaveGame()
+        with(binding) {
+            leaveGameButton.setOnClickListener {
+                viewModel.leaveGame()
+            }
+            myGameDetailsSwipeRefresh.setOnRefreshListener {
+                viewModel.playerList.observe(viewLifecycleOwner) { players ->
+                    adapter.setPlayers(players)
+                }
+            }
         }
     }
 
     private fun setupObservers() {
         with(viewModel) {
-            loadingLiveData.observe(viewLifecycleOwner) {
-                updateRefreshAnimation(it)
-            }
             errorLiveData.observe(viewLifecycleOwner) { error ->
                 showAlertDialog(error.message)
             }
@@ -116,15 +118,11 @@ class MyGameDetailsFragment :
         }
     }
 
-    private fun updateRefreshAnimation(value: Result.Loading) {
-        when (value.shouldShowLoading) {
-            true -> showLoadingAnimation()
-            false -> hideLoadingAnimation()
+    private fun setupLoading() {
+        viewModel.loadingLiveData.observe(viewLifecycleOwner) { isLoading ->
+            binding.myGameDetailsSwipeRefresh.isRefreshing = isLoading.shouldShowLoading
         }
     }
-
-    private fun showLoadingAnimation() = binding.myGameDetailsSwipeRefresh.showRefresh()
-    private fun hideLoadingAnimation() = binding.myGameDetailsSwipeRefresh.hideRefresh()
 
     private fun showAlertDialog(error: ErrorMessage) {
         val alertDialogFragment =

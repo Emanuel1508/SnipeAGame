@@ -6,7 +6,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.models.GameParameters
-import com.example.domain.models.Result
 import com.example.domain.utils.ErrorMessage
 import com.example.snipeagame.R
 import com.example.snipeagame.base.BaseFragment
@@ -16,7 +15,6 @@ import com.example.snipeagame.utils.AlertDialogFragment
 import com.example.snipeagame.utils.GameCompleteDialogFragment
 import com.example.snipeagame.utils.hideRefresh
 import com.example.snipeagame.utils.mapToUI
-import com.example.snipeagame.utils.showRefresh
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -30,6 +28,8 @@ class MyGamesFragment : BaseFragment<FragmentMyGamesBinding>(FragmentMyGamesBind
         super.onViewCreated(view, savedInstanceState)
         setupAdapter()
         setupObservers()
+        setupLoading()
+        setupListener()
     }
 
     private fun setupAdapter() {
@@ -51,24 +51,29 @@ class MyGamesFragment : BaseFragment<FragmentMyGamesBinding>(FragmentMyGamesBind
 
     private fun setupObservers() {
         with(viewModel) {
-            loadingLiveData.observe(viewLifecycleOwner) {
-                updateRefreshAnimation(it)
-            }
             errorLiveData.observe(viewLifecycleOwner) { error ->
                 showAlertDialog(error.message)
             }
         }
     }
 
-    private fun updateRefreshAnimation(value: Result.Loading) {
-        when (value.shouldShowLoading) {
-            true -> showLoadingAnimation()
-            false -> hideLoadingAnimation()
+    private fun setupLoading() {
+        viewModel.loadingLiveData.observe(viewLifecycleOwner) { isLoading ->
+            binding.myGamesSwipeRefresh.isRefreshing = isLoading.shouldShowLoading
         }
     }
 
-    private fun showLoadingAnimation() = binding.myGamesSwipeRefresh.showRefresh()
-    private fun hideLoadingAnimation() = binding.myGamesSwipeRefresh.hideRefresh()
+    private fun setupListener() {
+        with(binding) {
+            myGamesSwipeRefresh.setOnRefreshListener {
+                viewModel.myGames.observe(viewLifecycleOwner) { games ->
+                    adapter.setMyGames(games)
+                }
+                myGamesSwipeRefresh.hideRefresh()
+            }
+        }
+    }
+
 
     private fun navigateToGameDetails(game: GameParameters) {
         var isGameCompleted: Boolean
@@ -94,13 +99,12 @@ class MyGamesFragment : BaseFragment<FragmentMyGamesBinding>(FragmentMyGamesBind
     }
 
     private fun showGameCompleteDialog(game: GameParameters) {
-        val onSubmit: (String) -> Unit = { inputText ->
-            viewModel.onGameFinish(inputText, game)
-            adapter.finishGame(game)
-        }
         val gameCompleteDialogFragment =
             GameCompleteDialogFragment.newInstance(
-                onSubmitClick = onSubmit,
+                onSubmitClick = { inputText ->
+                    viewModel.onGameFinish(inputText, game)
+                    adapter.finishGame(game)
+                },
                 playerCount = game.currentPlayers
             )
         gameCompleteDialogFragment.show(parentFragmentManager, TAG)

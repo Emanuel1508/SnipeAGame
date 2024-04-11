@@ -3,6 +3,7 @@ package com.example.snipeagame.ui.introduction.login
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
+import com.example.domain.usecases.ForgotPasswordUseCase
 import com.example.domain.usecases.GetFactionUseCase
 import com.example.domain.usecases.GetUserIdUseCase
 import com.example.domain.usecases.UserLoginUseCase
@@ -18,7 +19,8 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private var userLoginUseCase: UserLoginUseCase,
     private var getFactionUseCase: GetFactionUseCase,
-    private var getUserIdUseCase: GetUserIdUseCase
+    private var getUserIdUseCase: GetUserIdUseCase,
+    private var forgotPasswordUseCase: ForgotPasswordUseCase
 ) : BaseViewModel() {
     private val _navigation = SingleLiveEvent<NavDestination>()
     val navigation: LiveData<NavDestination> get() = _navigation
@@ -75,6 +77,14 @@ class LoginViewModel @Inject constructor(
             )
         }
         hideLoading()
+    }
+
+    suspend fun onForgotPasswordSubmit(email: String) {
+        showLoading()
+        when (val result = forgotPasswordUseCase(email)) {
+            is UseCaseResponse.Success -> hideLoading()
+            is UseCaseResponse.Failure -> showError(result.error)
+        }
     }
 
     private fun showErrorMessage(errorMessage: ErrorMessage, logMessage: String) {

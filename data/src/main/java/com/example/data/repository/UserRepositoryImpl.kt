@@ -5,9 +5,11 @@ import com.example.data.utils.StringConstants
 import com.example.domain.models.UserDataParameters
 import com.example.domain.models.UserGameDataParameters
 import com.example.domain.models.UserGroupUpdateParameters
+import com.example.domain.models.UserStats
 import com.example.domain.repositories.UserRepository
 import com.example.domain.utils.ErrorMessage
 import com.example.domain.utils.UseCaseResponse
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
@@ -15,7 +17,8 @@ import java.net.UnknownHostException
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
-    private val firestore: FirebaseFirestore
+    private val firestore: FirebaseFirestore,
+    private val firebaseAuth: FirebaseAuth
 ) : UserRepository {
     override suspend fun createUser(
         userParameters: UserDataParameters
@@ -115,12 +118,46 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun forgotPassword(email: String): UseCaseResponse<String> {
+        return try {
+            firebaseAuth.sendPasswordResetEmail(email)
+            UseCaseResponse.Success(StringConstants.SUCCESS)
+        } catch (unknownHostException: UnknownHostException) {
+            unknownHostException.getUserError(ErrorMessage.NO_NETWORK)
+        } catch (exception: Exception) {
+            exception.getUserError(ErrorMessage.GENERAL)
+        }
+    }
+
+    override suspend fun getUserStats(userId: String): UseCaseResponse<UserStats> {
+        return try {
+            val userSnapshot = firestore.collection(DatabaseConstants.PROFILES)
+                .document(userId)
+                .get()
+                .await()
+            val userStats = documentToUserStats(userSnapshot)
+            UseCaseResponse.Success(userStats)
+        } catch (unknownHostException: UnknownHostException) {
+            unknownHostException.getUserError(ErrorMessage.NO_NETWORK)
+        } catch (exception: Exception) {
+            exception.getUserError(ErrorMessage.GENERAL)
+        }
+    }
+
     private fun documentToUserGameData(document: DocumentSnapshot): UserGameDataParameters {
         val profileData = document.toObject(UserGameDataParameters::class.java)
         if (profileData != null) {
             return profileData
         }
         return UserGameDataParameters()
+    }
+
+    private fun documentToUserStats(document: DocumentSnapshot): UserStats {
+        val statsData = document.toObject(UserStats::class.java)
+        if(statsData != null) {
+            return statsData
+        }
+        return UserStats()
     }
 
     private suspend fun getPlayerStats(takedowns: Int, userId: String) {

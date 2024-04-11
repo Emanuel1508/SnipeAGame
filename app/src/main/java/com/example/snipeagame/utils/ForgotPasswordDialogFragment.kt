@@ -6,24 +6,22 @@ import android.os.Bundle
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.DialogFragment
+import com.example.domain.utils.ValidationMessage
 import com.example.snipeagame.R
-import com.example.snipeagame.databinding.LayoutGameCompleteAlertBinding
+import com.example.snipeagame.databinding.LayoutForgotPasswordAlertBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.io.Serializable
 
-class GameCompleteDialogFragment : DialogFragment() {
-    private lateinit var binding: LayoutGameCompleteAlertBinding
-    private var playerCount: Int = 0
+class ForgotPasswordDialogFragment : DialogFragment() {
+    private lateinit var binding: LayoutForgotPasswordAlertBinding
 
     companion object {
         private const val CALLBACK_SUBMIT: String = StringConstants.CALLBACK_SUBMIT
-        private const val PLAYERS: String = StringConstants.PLAYER_COUNT
 
-        fun newInstance(onSubmitClick: (String) -> Unit, playerCount: Int): GameCompleteDialogFragment {
-            val fragment = GameCompleteDialogFragment()
+        fun newInstance(onSubmitClick: (String) -> Unit): ForgotPasswordDialogFragment {
+            val fragment = ForgotPasswordDialogFragment()
             val bundle = Bundle().apply {
                 putSerializable(CALLBACK_SUBMIT, onSubmitClick as Serializable)
-                putInt(PLAYERS, playerCount)
             }
             fragment.arguments = bundle
             return fragment
@@ -31,27 +29,20 @@ class GameCompleteDialogFragment : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        binding = LayoutGameCompleteAlertBinding.inflate(layoutInflater)
+        binding = LayoutForgotPasswordAlertBinding.inflate(layoutInflater)
         isCancelable = false
         setupListeners()
-        setPlayerCount()
         return setupDialog()?.create() ?: throw IllegalStateException("Activity cannot be null")
-    }
-
-    private fun setPlayerCount() {
-        playerCount = arguments?.getInt(PLAYERS) ?: 0
     }
 
     private fun setupDialog() =
         activity?.let { MaterialAlertDialogBuilder(it).setView(binding.root) }
 
     private fun setupListeners() {
+        val onSubmitClick = getSubmitCallback()
         with(binding) {
-            val onSubmit = getSubmitCallback()
-
-            alertPositiveButton.disable()
             alertPositiveButton.setOnClickListener {
-                onSubmit?.invoke(dialogInputText.text.toString())
+                onSubmitClick?.invoke(dialogInputText.text.toString())
                 dialog?.dismiss()
             }
             alertNegativeButton.setOnClickListener {
@@ -61,18 +52,20 @@ class GameCompleteDialogFragment : DialogFragment() {
                 val inputMethodManager =
                     requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    takedowns(inputMethodManager)
+                    checkEmail(inputMethodManager, dialogInputText.text.toString())
                 }
                 true
             }
         }
     }
 
-    private fun LayoutGameCompleteAlertBinding.takedowns(
-        inputMethodManager: InputMethodManager
+    private fun LayoutForgotPasswordAlertBinding.checkEmail(
+        inputMethodManager: InputMethodManager,
+        inputText: String
     ) {
-        if (dialogInputText.text.toString().toInt() > (playerCount * 2)) {
-            dialogInputText.error = getString(R.string.takedown_error)
+        val validateFields = ValidateFields()
+        if (validateFields.validateEmail(inputText) != ValidationMessage.ERROR_NOT_FOUND) {
+            dialogInputText.error = getString(R.string.invalid_email)
             alertPositiveButton.disable()
         } else {
             inputMethodManager.hideSoftInputFromWindow(dialogInputText.windowToken, 0)

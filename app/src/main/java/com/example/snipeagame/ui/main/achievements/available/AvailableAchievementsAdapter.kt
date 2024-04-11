@@ -33,13 +33,14 @@ class AvailableAchievementsAdapter(
         getAchievementInfo(position)
     }
 
-    fun notifyAchievementChange(position: Int) {
-        notifyItemChanged(position)
+    fun notifyAchievementChange() {
+        notifyItemChanged(NumberConstants.ZERO, availableAchievements.size)
     }
 
     fun setAchievements(achievements: Collection<AchievementsParameters>) {
         availableAchievements.clear()
         availableAchievements.addAll(achievements)
+        availableAchievements.sortBy { it.condition }
         notifyItemChanged(NumberConstants.ZERO, availableAchievements.size)
     }
 

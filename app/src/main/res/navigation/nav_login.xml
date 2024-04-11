@@ -11,6 +11,9 @@
         <action
             android:id="@+id/action_registerFragment_to_successFragment"
             app:destination="@id/successFragment" />
+        <action
+            android:id="@+id/action_registerFragment_to_privacyFragment"
+            app:destination="@id/privacyFragment" />
     </fragment>
     <fragment
         android:id="@+id/successFragment"
@@ -54,5 +57,13 @@
         <argument
             android:name="factionName"
             app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/privacyFragment"
+        android:name="com.example.snipeagame.ui.introduction.register.privacy.PrivacyFragment"
+        android:label="PrivacyFragment" >
+        <action
+            android:id="@+id/action_privacyFragment_to_registerFragment"
+            app:destination="@id/registerFragment" />
     </fragment>
 </navigation>

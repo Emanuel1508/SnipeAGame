@@ -104,8 +104,8 @@ class RolesFragment : BaseFragment<FragmentRolesBinding>(FragmentRolesBinding::i
     private fun setupSniperRole() {
         viewModel.setupRole(
             R.drawable.dmr,
-            getString(R.string.role_designated_marksman),
-            getString(R.string.designated_marksman_description),
+            getString(R.string.role_marksman),
+            getString(R.string.marksman_description),
             R.color.white
         )
     }

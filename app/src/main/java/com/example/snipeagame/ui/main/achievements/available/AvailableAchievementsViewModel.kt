@@ -4,8 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.domain.models.AchievementsParameters
+import com.example.domain.models.UserStats
 import com.example.domain.usecases.GetAvailableAchievementsUseCase
 import com.example.domain.usecases.GetUserIdUseCase
+import com.example.domain.usecases.GetUserStatsUseCase
 import com.example.domain.usecases.UnlockAchievementUseCase
 import com.example.domain.utils.ErrorMessage
 import com.example.domain.utils.UseCaseResponse
@@ -20,10 +22,12 @@ import javax.inject.Inject
 class AvailableAchievementsViewModel @Inject constructor(
     private val getAvailableAchievementsUseCase: GetAvailableAchievementsUseCase,
     private val unlockAchievementUseCase: UnlockAchievementUseCase,
-    private val getUserIdUseCase: GetUserIdUseCase
+    private val getUserIdUseCase: GetUserIdUseCase,
+    private val getUserStatsUseCase: GetUserStatsUseCase
 ) : BaseViewModel() {
     private var _achievements = MutableLiveData<List<AchievementsParameters>>()
     val achievements: LiveData<List<AchievementsParameters>> = _achievements
+    private var userStats: UserStats = UserStats()
 
     private val TAG = this::class.simpleName
 
@@ -54,7 +58,11 @@ class AvailableAchievementsViewModel @Inject constructor(
 
     private suspend fun fetchAchievements(userId: String) {
         when (val result = getAvailableAchievementsUseCase(userId)) {
-            is UseCaseResponse.Success -> onDataSuccess(result.body)
+            is UseCaseResponse.Success -> {
+                onDataSuccess(result.body)
+                fetchUserStats(userId)
+            }
+
             is UseCaseResponse.Failure -> onDataFailure(result.error)
         }
     }
@@ -76,11 +84,21 @@ class AvailableAchievementsViewModel @Inject constructor(
         hideLoading()
     }
 
-    fun pendingUnlock(position: Int, stats: Int = 0) {
+    private suspend fun fetchUserStats(userId: String) {
+        when (val statsResponse = getUserStatsUseCase(userId)) {
+            is UseCaseResponse.Success -> userStats = statsResponse.body
+            is UseCaseResponse.Failure -> onDataFailure(statsResponse.error)
+        }
+    }
+
+    fun pendingUnlock(position: Int) {
         val achievement = achievements.value?.get(position)
         achievement?.let {
-            if (achievement.condition <= stats) {
-                achievement.isButtonVisible = true
+            with(achievement) {
+                if (type == StringConstants.TAKEDOWN && condition <= userStats.takedowns)
+                    isButtonVisible = true
+                else if (type == StringConstants.GAME && condition <= userStats.games)
+                    isButtonVisible = true
             }
         }
     }

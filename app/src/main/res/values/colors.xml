@@ -13,4 +13,5 @@
     <color name="info_card_green">#F8FFFA</color>
     <color name="selected_green">#E0FFE7</color>
     <color name="light_gray">#F1F1F1</color>
+    <color name="teal">#00BCD2</color>
 </resources>

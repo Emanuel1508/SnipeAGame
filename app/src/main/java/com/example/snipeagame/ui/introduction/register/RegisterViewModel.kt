@@ -12,6 +12,7 @@ import com.example.domain.utils.UseCaseResponse
 import com.example.domain.utils.ValidationMessage
 import com.example.snipeagame.base.BaseViewModel
 import com.example.snipeagame.utils.ButtonState
+import com.example.snipeagame.utils.CheckboxState
 import com.example.snipeagame.utils.TextFieldStatus
 import com.example.snipeagame.utils.ValidateFields
 import com.example.snipeagame.utils.isValid
@@ -43,6 +44,9 @@ class RegisterViewModel @Inject constructor(
     private val _confirmPasswordState = MutableLiveData<TextFieldStatus>()
     val confirmPasswordState: LiveData<TextFieldStatus> = _confirmPasswordState
 
+    private val _checkedPrivacyAndPolicyState = MutableLiveData<CheckboxState>()
+    val checkedPrivacyAndPolicyState: LiveData<CheckboxState> get() = _checkedPrivacyAndPolicyState
+
     val registerButtonState = MediatorLiveData<ButtonState>()
 
     private val TAG: String = this::class.java.simpleName
@@ -54,7 +58,8 @@ class RegisterViewModel @Inject constructor(
             emailState,
             phoneNumberState,
             passwordState,
-            confirmPasswordState
+            confirmPasswordState,
+            checkedPrivacyAndPolicyState
         )
         errorSources.forEach { errorLiveData ->
             registerButtonState.addSource(errorLiveData) {
@@ -97,6 +102,10 @@ class RegisterViewModel @Inject constructor(
     fun onValidateConfirmPasswordEvent(confirmPassword: String, password: String) {
         val result = validateFields.validateConfirmPassword(confirmPassword, password)
         setConfirmPasswordState(confirmPassword, result)
+    }
+
+    fun onPrivacyAndPolicyCheckEvent(isChecked: Boolean) {
+        setPrivacyAndPolicyState(isChecked)
     }
 
     private fun setFirstNameState(firstName: String, result: ValidationMessage) {
@@ -147,6 +156,10 @@ class RegisterViewModel @Inject constructor(
         )
     }
 
+    private fun setPrivacyAndPolicyState(privacyAndPolicy: Boolean) {
+        _checkedPrivacyAndPolicyState.value = CheckboxState(privacyAndPolicy)
+    }
+
     private fun showErrorIcon(text: String, result: ValidationMessage) =
         (result != ValidationMessage.ERROR_NOT_FOUND && text.isNotEmpty())
 
@@ -157,12 +170,13 @@ class RegisterViewModel @Inject constructor(
             emailState.value?.isValid() == true &&
             phoneNumberState.value?.isValid() == true &&
             passwordState.value?.isValid() == true &&
-            confirmPasswordState.value?.isValid() == true
+            confirmPasswordState.value?.isValid() == true &&
+            checkedPrivacyAndPolicyState.value?.isChecked == true
         ) ButtonState.IsEnabled
         else ButtonState.NotEnabled
     }
 
-    private suspend fun registerUser(email:String, password: String) {
+    private suspend fun registerUser(email: String, password: String) {
         showLoading()
         when (val result = registerUseCase(email, password)) {
             is UseCaseResponse.Success -> updateUser(result.body)

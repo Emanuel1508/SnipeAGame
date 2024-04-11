@@ -5,7 +5,6 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.models.AchievementsParameters
-import com.example.domain.models.Result
 import com.example.domain.utils.ErrorMessage
 import com.example.snipeagame.R
 import com.example.snipeagame.base.BaseFragment
@@ -13,7 +12,6 @@ import com.example.snipeagame.databinding.FragmentAvailableAchievementsBinding
 import com.example.snipeagame.utils.AlertDialogFragment
 import com.example.snipeagame.utils.hideRefresh
 import com.example.snipeagame.utils.mapToUI
-import com.example.snipeagame.utils.showRefresh
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -29,12 +27,14 @@ class AvailableAchievementsFragment :
         super.onViewCreated(view, savedInstanceState)
         setupObservers()
         setupAdapter()
+        setupListener()
+        setupLoading()
     }
 
     private fun setupAdapter() {
         adapter = AvailableAchievementsAdapter(this) { position ->
             viewModel.pendingUnlock(position)
-            updateAchievement(position)
+            updateAchievement()
         }
         recyclerView = binding.availableAchievementsRecyclerView
         recyclerView.adapter = adapter
@@ -44,32 +44,38 @@ class AvailableAchievementsFragment :
         }
     }
 
-    private fun updateAchievement(position: Int) {
+    private fun updateAchievement() {
         recyclerView.post {
-            adapter.notifyAchievementChange(position)
+            adapter.notifyAchievementChange()
         }
     }
 
     private fun setupObservers() {
         with(viewModel) {
-            loadingLiveData.observe(viewLifecycleOwner) {
-                updateRefreshAnimation(it)
-            }
             errorLiveData.observe(viewLifecycleOwner) { error ->
                 showAlertDialog(error.message)
             }
         }
     }
 
-    private fun updateRefreshAnimation(value: Result.Loading) {
-        when (value.shouldShowLoading) {
-            true -> showLoadingAnimation()
-            false -> hideLoadingAnimation()
+    private fun setupListener() {
+        with(binding) {
+            availableAchievementsSwipeRefresh.setOnRefreshListener {
+                viewModel.achievements.observe(viewLifecycleOwner) { achievements ->
+                    adapter.setAchievements(achievements)
+                }
+                availableAchievementsSwipeRefresh.hideRefresh()
+            }
         }
     }
 
-    private fun showLoadingAnimation() = binding.availableAchievementsSwipeRefresh.showRefresh()
-    private fun hideLoadingAnimation() = binding.availableAchievementsSwipeRefresh.hideRefresh()
+    private fun setupLoading() {
+        with(binding) {
+            viewModel.loadingLiveData.observe(viewLifecycleOwner) { isLoading ->
+                availableAchievementsSwipeRefresh.isRefreshing = isLoading.shouldShowLoading
+            }
+        }
+    }
 
     private fun showAlertDialog(error: ErrorMessage) {
         val alertDialogFragment =

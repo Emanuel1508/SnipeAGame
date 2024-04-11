@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.example.domain.models.Result
 import com.example.domain.utils.ErrorMessage
@@ -13,10 +14,12 @@ import com.example.snipeagame.databinding.FragmentLoginBinding
 import com.example.snipeagame.ui.introduction.login.LoginViewModel.NavDestination
 import com.example.snipeagame.ui.main.MainActivity
 import com.example.snipeagame.utils.AlertDialogFragment
+import com.example.snipeagame.utils.ForgotPasswordDialogFragment
 import com.example.snipeagame.utils.hideRefresh
 import com.example.snipeagame.utils.mapToUI
 import com.example.snipeagame.utils.showRefresh
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::inflate) {
@@ -55,6 +58,9 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                     passwordInputText.text.toString()
                 )
             }
+            forgotPasswordTextView.setOnClickListener {
+                showForgotPasswordDialog()
+            }
         }
     }
 
@@ -82,6 +88,19 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
             }
         )
         alertDialogFragment.show(parentFragmentManager, TAG)
+    }
+
+    private fun showForgotPasswordDialog() {
+        val forgotPasswordDialog = ForgotPasswordDialogFragment.newInstance(
+            onSubmitClick = { text ->
+                with(viewModel) {
+                    viewModelScope.launch {
+                        onForgotPasswordSubmit(text)
+                    }
+                }
+            }
+        )
+        forgotPasswordDialog.show(parentFragmentManager, TAG)
     }
 
     private fun navigateToFactionScreen() =

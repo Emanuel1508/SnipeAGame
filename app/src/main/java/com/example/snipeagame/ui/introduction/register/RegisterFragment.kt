@@ -121,6 +121,13 @@ class RegisterFragment :
                         passwordInputText.text.toString()
                     )
                 }
+                privacyCheckBox.setOnCheckedChangeListener { _, _ ->
+                    privacyCheckBox.requestFocusFromTouch()
+                    onPrivacyAndPolicyCheckEvent(privacyCheckBox.isChecked)
+                }
+                privacyTextView.setOnClickListener {
+                    findNavController().navigate(RegisterFragmentDirections.actionRegisterFragmentToPrivacyFragment())
+                }
             }
         }
     }

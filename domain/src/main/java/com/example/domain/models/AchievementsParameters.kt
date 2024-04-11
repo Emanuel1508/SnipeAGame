@@ -7,6 +7,7 @@ data class AchievementsParameters(
     val description: String,
     var imageResource: Int,
     val condition: Int,
+    val type: String,
     var isButtonVisible: Boolean
 ) {
     constructor() : this(
@@ -14,6 +15,7 @@ data class AchievementsParameters(
         "",
         NumberConstants.ZERO,
         NumberConstants.LARGE_CONDITION,
+        "",
         false
     )
 

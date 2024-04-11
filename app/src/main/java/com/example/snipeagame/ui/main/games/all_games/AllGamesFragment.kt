@@ -64,7 +64,6 @@ class AllGamesFragment : BaseFragment<FragmentAllGamesBinding>(FragmentAllGamesB
 
     private fun setupObservers() {
         with(viewModel) {
-            loadingLiveData.observe(viewLifecycleOwner) {}
             errorLiveData.observe(viewLifecycleOwner) { error ->
                 showAlertDialog(error.message)
             }

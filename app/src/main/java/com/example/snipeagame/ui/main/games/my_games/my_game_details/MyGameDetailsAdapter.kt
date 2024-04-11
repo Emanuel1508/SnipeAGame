@@ -46,7 +46,7 @@ class MyGameDetailsAdapter : RecyclerView.Adapter<MyGameDetailsAdapter.ViewHolde
         return when (playerFaction) {
             StringConstants.AIRBORNE -> R.drawable.helicopter
             StringConstants.IMMORTALS -> R.drawable.first_aid
-            StringConstants.DESIGNATED_MARKSMAN -> R.drawable.dmr
+            StringConstants.MARKSMAN -> R.drawable.dmr
             StringConstants.ASSAULT_RIFLEMAN -> R.drawable.assault_rifle
             StringConstants.MACHINE_GUNNER -> R.drawable.machine_gun
             StringConstants.BREACHER -> R.drawable.shotgun

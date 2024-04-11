@@ -7,6 +7,7 @@ import com.example.domain.repositories.UserRepository
 import com.example.domain.usecases.CreateGameUseCase
 import com.example.domain.usecases.CreateUserUseCase
 import com.example.domain.usecases.FinishGameUseCase
+import com.example.domain.usecases.ForgotPasswordUseCase
 import com.example.domain.usecases.GetAvailableAchievementsUseCase
 import com.example.domain.usecases.GetFactionUseCase
 import com.example.domain.usecases.GetGamesUseCase
@@ -16,6 +17,7 @@ import com.example.domain.usecases.GetProfileDataForGamesUseCase
 import com.example.domain.usecases.GetProfileDataUseCase
 import com.example.domain.usecases.GetUnlockedAchievementsUseCase
 import com.example.domain.usecases.GetUserIdUseCase
+import com.example.domain.usecases.GetUserStatsUseCase
 import com.example.domain.usecases.JoinGameUseCase
 import com.example.domain.usecases.LeaveGameUseCase
 import com.example.domain.usecases.UnlockAchievementUseCase
@@ -126,4 +128,14 @@ object UseCaseModules {
     @Provides
     fun provideFinishGameUseCase(repository: GamesRepository) =
         FinishGameUseCase(repository)
+
+    @Singleton
+    @Provides
+    fun provideForgotPasswordUseCase(repository: UserRepository) =
+        ForgotPasswordUseCase(repository)
+
+    @Singleton
+    @Provides
+    fun provideUserStatsUseCase(repository: UserRepository) =
+        GetUserStatsUseCase(repository)
 }
