@@ -14,4 +14,5 @@
     <color name="selected_green">#E0FFE7</color>
     <color name="light_gray">#F1F1F1</color>
     <color name="teal">#00BCD2</color>
+    <color name="transparent">#0000ffff</color>
 </resources>

@@ -29,6 +29,7 @@ class AllGamesAdapter(private val gameClickListener: GameClickListener) :
     fun setGames(games: Collection<GameParameters>) {
         allGames.clear()
         allGames.addAll(games)
+        allGames.sortBy { it.date }
         notifyItemChanged(NumberConstants.ZERO, allGames.size)
     }
 
@@ -66,6 +67,10 @@ class AllGamesAdapter(private val gameClickListener: GameClickListener) :
             allGames.remove(game)
             notifyItemRemoved(position)
         }
+    }
+
+    fun updateGames() {
+        notifyDataSetChanged()
     }
 
     interface GameClickListener {

@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.domain.models.GameParameters
 import com.example.domain.models.UserGameDataParameters
+import com.example.domain.models.containsFilteringString
 import com.example.domain.usecases.GetGamesUseCase
 import com.example.domain.usecases.GetProfileDataForGamesUseCase
 import com.example.domain.usecases.GetUserIdUseCase
@@ -26,19 +27,26 @@ class AllGamesViewModel @Inject constructor(
 ) : BaseViewModel() {
     private val _games = MutableLiveData<List<GameParameters>>()
     val games: LiveData<List<GameParameters>> = _games
+
+    private val _gameListStatus = MutableLiveData<GameListState>()
+    val gameListStatus: LiveData<GameListState> = _gameListStatus
+
+    private var filteredGames: List<GameParameters> = emptyList()
+
     private lateinit var id: String
     private val TAG: String = this::class.java.simpleName
 
     init {
-         getUserId()
+        getUserId()
     }
 
     private fun getUserId() {
-        when(val result = getUserIdUseCase()) {
+        when (val result = getUserIdUseCase()) {
             is UseCaseResponse.Success -> {
                 getGames(result.body)
                 id = result.body
             }
+
             is UseCaseResponse.Failure -> onDataFailure(result.error)
         }
     }
@@ -55,7 +63,7 @@ class AllGamesViewModel @Inject constructor(
 
     fun onJoinGameButtonPress(game: GameParameters) {
         viewModelScope.launch(Dispatchers.IO) {
-           getUserGameData(id,game)
+            getUserGameData(id, game)
         }
     }
 
@@ -85,12 +93,42 @@ class AllGamesViewModel @Inject constructor(
     }
 
     private fun onGameDataSuccess(gameParameters: List<GameParameters>) {
-        _games.postValue(gameParameters)
+        filteredGames = gameParameters
+        _games.postValue(filteredGames)
         hideLoading()
     }
 
     private fun onDataFailure(error: ErrorMessage) {
         showError(error)
         hideLoading()
+    }
+
+    private fun verifyGames() {
+        _gameListStatus.value =
+            if (_games.value?.isEmpty() == true)
+                GameListState.NotPopulated
+            else
+                GameListState.IsPopulated
+    }
+
+    fun onFilterGames(filteringString: String) {
+        showLoading()
+        if (filteringString.isEmpty()) {
+            _games.value = filteredGames
+        }
+        _games.value = _games.value?.filter { gameEntity ->
+            gameEntity.containsFilteringString(filteringString)
+        }
+        verifyGames()
+        hideLoading()
+    }
+
+    fun onRefresh() {
+        getGames(id)
+    }
+
+    sealed class GameListState {
+        data object IsPopulated : GameListState()
+        data object NotPopulated : GameListState()
     }
 }

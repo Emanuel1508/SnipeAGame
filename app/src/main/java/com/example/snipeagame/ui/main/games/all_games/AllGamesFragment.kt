@@ -2,6 +2,8 @@ package com.example.snipeagame.ui.main.games.all_games
 
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -11,9 +13,12 @@ import com.example.snipeagame.R
 import com.example.snipeagame.base.BaseFragment
 import com.example.snipeagame.databinding.FragmentAllGamesBinding
 import com.example.snipeagame.ui.main.games.GamesFragmentDirections
+import com.example.snipeagame.ui.main.games.all_games.AllGamesViewModel.GameListState
 import com.example.snipeagame.utils.AlertDialogFragment
-import com.example.snipeagame.utils.hideRefresh
+import com.example.snipeagame.utils.hide
+import com.example.snipeagame.utils.hideKeyboard
 import com.example.snipeagame.utils.mapToUI
+import com.example.snipeagame.utils.show
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -47,12 +52,29 @@ class AllGamesFragment : BaseFragment<FragmentAllGamesBinding>(FragmentAllGamesB
 
     private fun setupListener() {
         with(binding) {
-            allGamesSwipeRefresh.setOnRefreshListener {
-                viewModel.games.observe(viewLifecycleOwner) { games ->
-                    adapter.setGames(games)
-                }
-                allGamesSwipeRefresh.hideRefresh()
+            allGamesSearchBar.setOnKeyListener { _, id, _ ->
+                if (isDonePressed(id))
+                    hideKeyboard()
+                true
             }
+            allGamesConstraintLayout.setOnClickListener {
+                hideKeyboard()
+            }
+            allGamesSwipeRefresh.setOnRefreshListener {
+                viewModel.onRefresh()
+            }
+            allGamesSearchBar.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    return false
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    if (newText != null) {
+                        setupFilter(newText)
+                    }
+                    return true
+                }
+            })
         }
     }
 
@@ -66,6 +88,23 @@ class AllGamesFragment : BaseFragment<FragmentAllGamesBinding>(FragmentAllGamesB
         with(viewModel) {
             errorLiveData.observe(viewLifecycleOwner) { error ->
                 showAlertDialog(error.message)
+            }
+            gameListStatus.observe(viewLifecycleOwner) { status ->
+                when (status) {
+                    is GameListState.IsPopulated -> binding.noGamesTextView.hide()
+                    is GameListState.NotPopulated -> binding.noGamesTextView.show()
+                }
+            }
+        }
+    }
+
+    private fun setupFilter(filteringString: String) {
+        with(viewModel) {
+            onFilterGames(filteringString)
+            games.observe(viewLifecycleOwner) { filteredGames ->
+                filteredGames.let {
+                    adapter.updateGames()
+                }
             }
         }
     }
@@ -88,4 +127,6 @@ class AllGamesFragment : BaseFragment<FragmentAllGamesBinding>(FragmentAllGamesB
                 onRetryClick = {})
         alertDialogFragment.show(parentFragmentManager, TAG)
     }
+
+    private fun isDonePressed(id: Int) = id == EditorInfo.IME_ACTION_DONE
 }

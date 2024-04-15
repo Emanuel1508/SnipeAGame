@@ -108,6 +108,8 @@
     <string name="takedowns_hint">Insert takedowns</string>
     <string name="submit">Submit</string>
     <string name="takedown_error">Introduce a valid number</string>
+    <string name="no_games_were_found">No games were found</string>
+    <string name="search_games">Search for games</string>
     <!--Privacy Policy Screen-->
     <string name="privacy_policy_title">Privacy Policy</string>
     <string name="first_section">This privacy policy applies to the SnipeAGame app (hereby referred to as \'\'Application\'\') for mobile devices that was created by Pop Emanuel (hereby referred to as \'\'Service Provider\'\') as a Freemium service. This service is intended for use AS IS.</string>

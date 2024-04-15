@@ -1,52 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/allGames_constraintLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/all_games_topHorizontalGuideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.05"/>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/all_games_topHorizontalGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.05" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/allGames_swipeRefresh"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/all_games_topHorizontalGuideline"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@id/createGame_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:visibility="visible">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/allGames_searchBar">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/all_games_recyclerView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintTop_toBottomOf="@id/all_games_topHorizontalGuideline"
-            app:layout_constraintBottom_toTopOf="@id/createGame_button"
+            android:layout_marginBottom="@dimen/size_16"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:layout_marginBottom="@dimen/size_16"/>
+            app:layout_constraintBottom_toTopOf="@id/createGame_button"
+            app:layout_constraintTop_toBottomOf="@id/allGames_searchBar" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-        <Button
-            android:id="@+id/createGame_button"
-            style="@style/ThemeButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/create_game"
-            app:layout_constraintBottom_toTopOf="@id/all_games_bottomHorizontalGuideline"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/allGames_searchBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/size_8"
+        android:background="@color/white"
+        android:elevation="@dimen/size_8"
+        android:focusable="false"
+        android:imeOptions="actionDone"
+        app:iconifiedByDefault="false"
+        app:layout_constraintBottom_toTopOf="@id/allGames_swipeRefresh"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/all_games_topHorizontalGuideline"
+        app:queryBackground="@color/transparent"
+        app:queryHint="@string/search_games" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/all_games_bottomHorizontalGuideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.95" />
+    <Button
+        android:id="@+id/createGame_button"
+        style="@style/ThemeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/create_game"
+        app:layout_constraintBottom_toTopOf="@id/all_games_bottomHorizontalGuideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/noGames_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_games_were_found"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/all_games_bottomHorizontalGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.98" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
