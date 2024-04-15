@@ -12,6 +12,7 @@ fun ErrorMessage.mapToUI(): Int {
         ErrorMessage.GENERAL -> R.string.general_error
         ErrorMessage.INCORRECT_EMAIL -> R.string.incorrect_email
         ErrorMessage.INVALID_USER -> R.string.invalid_user_error
+        ErrorMessage.WHATSAPP -> R.string.whatsapp
         else -> R.string.no_error
     }
 }

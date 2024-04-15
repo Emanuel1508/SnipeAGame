@@ -1,5 +1,6 @@
 package com.example.snipeagame.ui.main.games.my_games.my_game_details
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -11,7 +12,10 @@ import com.example.domain.utils.ErrorMessage
 import com.example.snipeagame.R
 import com.example.snipeagame.base.BaseFragment
 import com.example.snipeagame.databinding.FragmentMyGameDetailsBinding
+import com.example.snipeagame.ui.main.games.my_games.my_game_details.MyGameDetailsViewModel.IsAppInstalled
+import com.example.snipeagame.ui.main.games.my_games.my_game_details.MyGameDetailsViewModel.UiState
 import com.example.snipeagame.utils.AlertDialogFragment
+import com.example.snipeagame.utils.StringConstants
 import com.example.snipeagame.utils.hide
 import com.example.snipeagame.utils.mapToUI
 import com.example.snipeagame.utils.show
@@ -63,12 +67,19 @@ class MyGameDetailsFragment :
 
     private fun setupListeners() {
         with(binding) {
-            leaveGameButton.setOnClickListener {
-                viewModel.leaveGame()
-            }
-            myGameDetailsSwipeRefresh.setOnRefreshListener {
-                viewModel.playerList.observe(viewLifecycleOwner) { players ->
-                    adapter.setPlayers(players)
+            with(viewModel) {
+                leaveGameButton.setOnClickListener {
+                    onLeaveGame()
+                }
+                myGameDetailsSwipeRefresh.setOnRefreshListener {
+                    onRefresh()
+                }
+                inviteFriendButton.setOnClickListener {
+                    activity?.let {
+                        onInviteFriendPress(
+                            it.packageManager
+                        )
+                    }
                 }
             }
         }
@@ -89,7 +100,7 @@ class MyGameDetailsFragment :
             }
             gameState.observe(viewLifecycleOwner) { gameStatus ->
                 when (gameStatus) {
-                    is MyGameDetailsViewModel.UiState.GameInProgress -> {
+                    is UiState.GameInProgress -> {
                         playerList.observe(
                             viewLifecycleOwner
                         ) { players ->
@@ -97,13 +108,19 @@ class MyGameDetailsFragment :
                         }
                     }
 
-                    is MyGameDetailsViewModel.UiState.GameCompleted -> {
+                    is UiState.GameCompleted -> {
                         with(binding) {
                             gameCompleteTextView.show()
                             leaveGameButton.hide()
                             gameDetailHeaderTextView.hide()
                         }
                     }
+                }
+            }
+            appInstallationStatus.observe(viewLifecycleOwner) { installationStatus ->
+                when(installationStatus) {
+                    is IsAppInstalled.IsInstalled -> inviteFriend()
+                    is IsAppInstalled.NotInstalled -> showAlertDialog(ErrorMessage.WHATSAPP)
                 }
             }
         }
@@ -122,6 +139,14 @@ class MyGameDetailsFragment :
         viewModel.loadingLiveData.observe(viewLifecycleOwner) { isLoading ->
             binding.myGameDetailsSwipeRefresh.isRefreshing = isLoading.shouldShowLoading
         }
+    }
+
+    private fun inviteFriend() {
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.type = "text/plain"
+        intent.setPackage(StringConstants.WHATS_APP_PACKAGE)
+        intent.putExtra(Intent.EXTRA_TEXT, gameId)
+        context?.startActivity(intent)
     }
 
     private fun showAlertDialog(error: ErrorMessage) {

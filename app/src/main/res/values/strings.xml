@@ -44,6 +44,7 @@
     <string name="retry_button">Retry</string>
     <string name="cancel_button">Cancel</string>
     <string name="incorrect_email">The email in the field is invalid. Introduce a valid email address above</string>
+    <string name="whatsapp">Please install Whats App</string>
     <!--Faction Screen-->
     <string name="choose_faction">So far so good!</string>
     <string name="hint_text">Now it\'s time for you to choose your faction</string>
@@ -110,6 +111,7 @@
     <string name="takedown_error">Introduce a valid number</string>
     <string name="no_games_were_found">No games were found</string>
     <string name="search_games">Search for games</string>
+    <string name="invite_friend">Invite friend</string>
     <!--Privacy Policy Screen-->
     <string name="privacy_policy_title">Privacy Policy</string>
     <string name="first_section">This privacy policy applies to the SnipeAGame app (hereby referred to as \'\'Application\'\') for mobile devices that was created by Pop Emanuel (hereby referred to as \'\'Service Provider\'\') as a Freemium service. This service is intended for use AS IS.</string>

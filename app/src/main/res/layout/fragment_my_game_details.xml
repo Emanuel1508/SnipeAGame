@@ -37,14 +37,14 @@
             style="@style/HintText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/size_16"
             android:text="@string/game_complete"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="visible"
-            android:layout_marginHorizontal="@dimen/size_16"/>
+            tools:visibility="visible" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/game_detail_topHorizontalGuideline"
@@ -55,13 +55,25 @@
 
         <Button
             android:id="@+id/leaveGame_button"
-            style="@style/ThemeButton"
+            style="@style/RedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/leave_game"
             app:layout_constraintBottom_toTopOf="@id/game_detail_bottomHorizontalGuideline"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/game_detail_middleVerticalGuideline"
+            android:layout_marginHorizontal="@dimen/size_8"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/inviteFriend_button"
+            style="@style/ThemeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/invite_friend"
+            app:layout_constraintBottom_toTopOf="@id/game_detail_bottomHorizontalGuideline"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginHorizontal="@dimen/size_8"
+            app:layout_constraintStart_toStartOf="@id/game_detail_middleVerticalGuideline" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/game_detail_bottomHorizontalGuideline"
@@ -69,5 +81,12 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.95" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/game_detail_middleVerticalGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

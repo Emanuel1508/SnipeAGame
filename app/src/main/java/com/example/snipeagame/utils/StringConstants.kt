@@ -24,5 +24,6 @@ class StringConstants {
         const val FINISH_GAME = "Finish Game"
         const val TAKEDOWN = "takedown"
         const val GAME = "game"
+        const val WHATS_APP_PACKAGE = "com.whatsapp"
     }
 }

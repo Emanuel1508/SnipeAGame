@@ -10,6 +10,7 @@
     <color name="unfocused">#F8F8F8</color>
     <color name="grey">#5F5F5F</color>
     <color name="red">#FF0000</color>
+    <color name="dark_red">#C80000</color>
     <color name="info_card_green">#F8FFFA</color>
     <color name="selected_green">#E0FFE7</color>
     <color name="light_gray">#F1F1F1</color>

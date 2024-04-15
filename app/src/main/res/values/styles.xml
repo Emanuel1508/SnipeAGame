@@ -85,6 +85,13 @@
         <item name="android:letterSpacing">0.1</item>
     </style>
 
+    <style name="RedButton">
+        <item name="android:textSize">@dimen/size_24</item>
+        <item name="android:backgroundTint">@color/dark_red</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:letterSpacing">0.1</item>
+    </style>
+
     <style name="WhiteButton">
         <item name="android:textSize">@dimen/size_24</item>
         <item name="android:fontFamily">@font/roboto_regular</item>

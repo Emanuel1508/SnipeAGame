@@ -8,4 +8,5 @@ enum class ErrorMessage {
     INCORRECT_EMAIL,
     INVALID_USER,
     GENERAL,
+    WHATSAPP
 }

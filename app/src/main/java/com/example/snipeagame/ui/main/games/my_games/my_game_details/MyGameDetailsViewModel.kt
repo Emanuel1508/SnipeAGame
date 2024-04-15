@@ -1,5 +1,6 @@
 package com.example.snipeagame.ui.main.games.my_games.my_game_details
 
+import android.content.pm.PackageManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -11,6 +12,7 @@ import com.example.domain.utils.ErrorMessage
 import com.example.domain.utils.UseCaseResponse
 import com.example.snipeagame.base.BaseViewModel
 import com.example.snipeagame.utils.SingleLiveEvent
+import com.example.snipeagame.utils.StringConstants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,24 +26,20 @@ class MyGameDetailsViewModel @Inject constructor(
 ) : BaseViewModel() {
     private val _playerList = MutableLiveData<List<UserGameDataParameters>>()
     val playerList: LiveData<List<UserGameDataParameters>> = _playerList
+
     private val _navigation = SingleLiveEvent<LeaveGameRedirect>()
     val navigation: LiveData<LeaveGameRedirect> = _navigation
+
     private val _gameState = MutableLiveData<UiState>()
     val gameState: LiveData<UiState> = _gameState
+
+    private val _appInstallationStatus = MutableLiveData<IsAppInstalled>()
+    val appInstallationStatus: LiveData<IsAppInstalled> = _appInstallationStatus
+
     private var gameId: String = ""
     private val TAG = this::class.java.simpleName
 
-    private fun onGameDataSuccess(playerData: List<UserGameDataParameters>) {
-        _playerList.postValue(playerData)
-        hideLoading()
-    }
-
-    private fun onDataFailure(error: ErrorMessage) {
-        showError(error)
-        hideLoading()
-    }
-
-    fun leaveGame() {
+    fun onLeaveGame() {
         viewModelScope.launch(Dispatchers.IO) {
             when (val result = getUserIdUseCase()) {
                 is UseCaseResponse.Success -> {
@@ -63,6 +61,16 @@ class MyGameDetailsViewModel @Inject constructor(
         this.gameId = gameId
     }
 
+    private fun onGameDataSuccess(playerData: List<UserGameDataParameters>) {
+        _playerList.postValue(playerData)
+        hideLoading()
+    }
+
+    private fun onDataFailure(error: ErrorMessage) {
+        showError(error)
+        hideLoading()
+    }
+
     fun getPlayers() {
         showLoading()
         viewModelScope.launch(Dispatchers.IO) {
@@ -77,6 +85,27 @@ class MyGameDetailsViewModel @Inject constructor(
         _gameState.value = if (isGameCompleted) UiState.GameCompleted else UiState.GameInProgress
     }
 
+    fun onRefresh() {
+        getPlayers()
+    }
+
+    fun onInviteFriendPress(packageManager: PackageManager) {
+        _appInstallationStatus.value =
+            if (isWhatsAppInstalled(packageManager))
+                IsAppInstalled.IsInstalled
+            else
+                IsAppInstalled.NotInstalled
+    }
+
+    private fun isWhatsAppInstalled(packageManager: PackageManager): Boolean {
+        return try {
+            packageManager.getPackageInfo(StringConstants.WHATS_APP_PACKAGE, PackageManager.GET_ACTIVITIES)
+            true
+        } catch (e: PackageManager.NameNotFoundException) {
+            false
+        }
+    }
+
     sealed class LeaveGameRedirect {
         data object GameFragment : LeaveGameRedirect()
     }
@@ -84,5 +113,10 @@ class MyGameDetailsViewModel @Inject constructor(
     sealed class UiState {
         data object GameInProgress : UiState()
         data object GameCompleted : UiState()
+    }
+
+    sealed class IsAppInstalled {
+        data object IsInstalled : IsAppInstalled()
+        data object NotInstalled : IsAppInstalled()
     }
 }
