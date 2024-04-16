@@ -28,8 +28,6 @@ class AvailableAchievementsViewModel @Inject constructor(
     private var _achievements = MutableLiveData<List<AchievementsParameters>>()
     val achievements: LiveData<List<AchievementsParameters>> = _achievements
 
-    private var achievementList: List<AchievementsParameters> = emptyList()
-
     private var userId: String = ""
     private var userStats: UserStats = UserStats()
     private val TAG = this::class.simpleName
@@ -79,8 +77,7 @@ class AvailableAchievementsViewModel @Inject constructor(
     }
 
     private fun onDataSuccess(achievementsData: List<AchievementsParameters>) {
-        achievementList = achievementsData
-        _achievements.postValue(achievementList)
+        _achievements.postValue(achievementsData)
     }
 
     private fun onDataFailure(error: ErrorMessage) {
@@ -94,7 +91,7 @@ class AvailableAchievementsViewModel @Inject constructor(
     }
 
     fun pendingUnlock() {
-        achievementList.forEach { achievement ->
+        _achievements.value?.forEach { achievement ->
             with(achievement) {
                 if (type == StringConstants.TAKEDOWN && condition <= userStats.takedowns) {
                     isButtonVisible = true
