@@ -128,4 +128,10 @@
         <item name="android:textColorLink">@color/teal</item>
         <item name="android:buttonTint">@color/black</item>
     </style>
+
+    <style name="Toolbar">
+        <item name="background">@color/theme_green</item>
+        <item name="theme">?attr/actionBarTheme</item>
+        <item name="titleTextColor">@color/white</item>
+    </style>
 </resources>

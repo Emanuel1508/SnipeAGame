@@ -10,14 +10,12 @@ import com.example.snipeagame.R
 import com.example.snipeagame.base.BaseFragment
 import com.example.snipeagame.databinding.FragmentAvailableAchievementsBinding
 import com.example.snipeagame.utils.AlertDialogFragment
-import com.example.snipeagame.utils.hideRefresh
 import com.example.snipeagame.utils.mapToUI
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class AvailableAchievementsFragment :
-    BaseFragment<FragmentAvailableAchievementsBinding>(FragmentAvailableAchievementsBinding::inflate),
-    AvailableAchievementsAdapter.AchievementClickListener {
+    BaseFragment<FragmentAvailableAchievementsBinding>(FragmentAvailableAchievementsBinding::inflate) {
     private val viewModel: AvailableAchievementsViewModel by viewModels()
     private lateinit var adapter: AvailableAchievementsAdapter
     private lateinit var recyclerView: RecyclerView
@@ -25,22 +23,43 @@ class AvailableAchievementsFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupObservers()
         setupAdapter()
+        setupObservers()
         setupListener()
-        setupLoading()
     }
 
     private fun setupAdapter() {
-        adapter = AvailableAchievementsAdapter(this) { position ->
-            viewModel.pendingUnlock(position)
-            updateAchievement()
-        }
+        adapter = AvailableAchievementsAdapter(object :
+            AvailableAchievementsAdapter.AchievementClickListener {
+            override fun onAchievementClick(achievement: AchievementsParameters) {
+                viewModel.unlockAchievement(achievement)
+                updateAchievement()
+            }
+        })
         recyclerView = binding.availableAchievementsRecyclerView
         recyclerView.adapter = adapter
+    }
 
-        viewModel.achievements.observe(viewLifecycleOwner) { achievements ->
-            adapter.setAchievements(achievements)
+    private fun setupObservers() {
+        with(viewModel) {
+            errorLiveData.observe(viewLifecycleOwner) { error ->
+                showAlertDialog(error.message)
+            }
+            loadingLiveData.observe(viewLifecycleOwner) { isLoading ->
+                binding.availableAchievementsSwipeRefresh.isRefreshing = isLoading.shouldShowLoading
+            }
+            achievements.observe(viewLifecycleOwner) { achievements ->
+                pendingUnlock()
+                adapter.setAchievements(achievements)
+            }
+        }
+    }
+
+    private fun setupListener() {
+        with(binding) {
+            availableAchievementsSwipeRefresh.setOnRefreshListener {
+                viewModel.onRefresh()
+            }
         }
     }
 
@@ -50,42 +69,11 @@ class AvailableAchievementsFragment :
         }
     }
 
-    private fun setupObservers() {
-        with(viewModel) {
-            errorLiveData.observe(viewLifecycleOwner) { error ->
-                showAlertDialog(error.message)
-            }
-        }
-    }
-
-    private fun setupListener() {
-        with(binding) {
-            availableAchievementsSwipeRefresh.setOnRefreshListener {
-                viewModel.achievements.observe(viewLifecycleOwner) { achievements ->
-                    adapter.setAchievements(achievements)
-                }
-                availableAchievementsSwipeRefresh.hideRefresh()
-            }
-        }
-    }
-
-    private fun setupLoading() {
-        with(binding) {
-            viewModel.loadingLiveData.observe(viewLifecycleOwner) { isLoading ->
-                availableAchievementsSwipeRefresh.isRefreshing = isLoading.shouldShowLoading
-            }
-        }
-    }
-
     private fun showAlertDialog(error: ErrorMessage) {
         val alertDialogFragment =
             AlertDialogFragment.newInstance(title = getString(R.string.oops_title),
                 description = getString(error.mapToUI()),
                 onRetryClick = {})
         alertDialogFragment.show(parentFragmentManager, TAG)
-    }
-
-    override fun onAchievementClick(achievement: AchievementsParameters) {
-        viewModel.unlockAchievement(achievement)
     }
 }

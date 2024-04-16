@@ -11,7 +11,6 @@ import com.example.snipeagame.databinding.ItemAchievementBinding
 
 class AvailableAchievementsAdapter(
     private val achievementClickListener: AchievementClickListener,
-    private var getItemInfo: ((Int) -> Unit)
 ) :
     RecyclerView.Adapter<AvailableAchievementsAdapter.ViewHolder>() {
     private val availableAchievements = mutableListOf<AchievementsParameters>()
@@ -30,11 +29,10 @@ class AvailableAchievementsAdapter(
         val achievement = availableAchievements[position]
         setViews(holder, achievement)
         setListeners(holder, achievement)
-        getAchievementInfo(position)
     }
 
     fun notifyAchievementChange() {
-        notifyItemChanged(NumberConstants.ZERO, availableAchievements.size)
+        notifyDataSetChanged()
     }
 
     fun setAchievements(achievements: Collection<AchievementsParameters>) {
@@ -69,12 +67,8 @@ class AvailableAchievementsAdapter(
         holder.button.setOnClickListener {
             achievementClickListener.onAchievementClick(achievement)
             availableAchievements.remove(achievement)
-            notifyItemChanged(position, availableAchievements.size)
+            notifyItemRemoved(position)
         }
-    }
-
-    private fun getAchievementInfo(position: Int) {
-        getItemInfo.invoke(position)
     }
 
     interface AchievementClickListener {

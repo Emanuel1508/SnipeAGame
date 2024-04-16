@@ -45,9 +45,6 @@ class AllGamesFragment : BaseFragment<FragmentAllGamesBinding>(FragmentAllGamesB
         })
         recyclerView = binding.allGamesRecyclerView
         recyclerView.adapter = adapter
-        viewModel.games.observe(viewLifecycleOwner) { games ->
-            adapter.setGames(games)
-        }
     }
 
     private fun setupListener() {
@@ -94,6 +91,9 @@ class AllGamesFragment : BaseFragment<FragmentAllGamesBinding>(FragmentAllGamesB
                     is GameListState.IsPopulated -> binding.noGamesTextView.hide()
                     is GameListState.NotPopulated -> binding.noGamesTextView.show()
                 }
+            }
+            games.observe(viewLifecycleOwner) { games ->
+                adapter.setGames(games)
             }
         }
     }
