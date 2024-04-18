@@ -3,6 +3,8 @@ package com.example.snipeagame.ui.main.games.my_games.my_game_details
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -40,8 +42,9 @@ class MyGameDetailsFragment :
         passGameId(gameId)
         setUI()
         setupAdapter()
-        setupObservers()
         setupListeners()
+        setupObservers()
+        setupToolbar()
         setupLoading()
     }
 
@@ -113,6 +116,7 @@ class MyGameDetailsFragment :
                             gameCompleteTextView.show()
                             leaveGameButton.hide()
                             gameDetailHeaderTextView.hide()
+                            inviteFriendButton.hide()
                         }
                     }
                 }
@@ -123,6 +127,14 @@ class MyGameDetailsFragment :
                     is IsAppInstalled.NotInstalled -> showAlertDialog(ErrorMessage.WHATSAPP)
                 }
             }
+        }
+    }
+
+    private fun setupToolbar() {
+        val toolbar: Toolbar = binding.toolbar
+        (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
+        toolbar.setNavigationOnClickListener {
+            requireActivity().supportFragmentManager.popBackStack()
         }
     }
 

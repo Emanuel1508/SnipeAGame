@@ -3,6 +3,8 @@ package com.example.snipeagame.ui.introduction.login
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
@@ -31,6 +33,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
         hideLoadingAnimation()
         setupObservers()
         setupListeners()
+        setupToolbar()
     }
 
     private fun setupObservers() {
@@ -61,6 +64,14 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
             forgotPasswordTextView.setOnClickListener {
                 showForgotPasswordDialog()
             }
+        }
+    }
+
+    private fun setupToolbar() {
+        val toolbar: Toolbar = binding.toolbar
+        (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
+        toolbar.setNavigationOnClickListener {
+            requireActivity().supportFragmentManager.popBackStack()
         }
     }
 

@@ -9,6 +9,7 @@ import com.example.snipeagame.base.BaseActivity
 import com.example.snipeagame.databinding.ActivityMainBinding
 import com.example.snipeagame.utils.StringConstants
 import com.example.snipeagame.utils.gone
+import com.example.snipeagame.utils.hide
 import com.example.snipeagame.utils.show
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -28,7 +29,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     as NavHostFragment).navController
         binding.mainBottomNavigation.setupWithNavController(navController)
         setupBottomNavBar(navController)
+        setupListener(navController)
         navigationVisibility(navController)
+    }
+
+    private fun setupListener(navController: NavController) {
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            setupToolbarVisibility(destination.id)
+        }
     }
 
     private fun setupBottomNavBar(navController: NavController) {
@@ -53,6 +61,16 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             R.id.achievements_fragment -> title = getString(R.string.achievements)
         }
         binding.toolbar.toolbarTitle.text = title
+    }
+
+    private fun setupToolbarVisibility(id: Int) {
+        with(binding) {
+            when (id) {
+                R.id.createGameFragment -> toolbar.mainToolbar.hide()
+                R.id.myGameDetailsFragment -> toolbar.mainToolbar.hide()
+                else -> toolbar.mainToolbar.show()
+            }
+        }
     }
 
     private fun navigationVisibility(navController: NavController) {

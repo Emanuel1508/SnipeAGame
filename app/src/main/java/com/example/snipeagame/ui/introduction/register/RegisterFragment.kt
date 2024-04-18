@@ -2,6 +2,8 @@ package com.example.snipeagame.ui.introduction.register
 
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -31,6 +33,7 @@ class RegisterFragment :
         hideLoadingAnimation()
         setupObservers()
         setupListeners()
+        setupToolbar()
     }
 
     private fun setupObservers() {
@@ -129,6 +132,14 @@ class RegisterFragment :
                     findNavController().navigate(RegisterFragmentDirections.actionRegisterFragmentToPrivacyFragment())
                 }
             }
+        }
+    }
+
+    private fun setupToolbar() {
+        val toolbar: Toolbar = binding.toolbar
+        (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
+        toolbar.setNavigationOnClickListener {
+            requireActivity().supportFragmentManager.popBackStack()
         }
     }
 

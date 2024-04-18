@@ -4,6 +4,8 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewModelScope
@@ -39,6 +41,7 @@ class CreateGameFragment :
         super.onViewCreated(view, savedInstanceState)
         hideLoadingAnimation()
         setupListeners()
+        setupToolbar()
         setupObservers()
         formatInitialText()
     }
@@ -71,6 +74,14 @@ class CreateGameFragment :
                     }
                 }
             }
+        }
+    }
+
+    private fun setupToolbar() {
+        val toolbar: Toolbar = binding.toolbar
+        (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
+        toolbar.setNavigationOnClickListener {
+            requireActivity().supportFragmentManager.popBackStack()
         }
     }
 
