@@ -29,7 +29,7 @@ class AllGamesAdapter(private val gameClickListener: GameClickListener) :
     fun setGames(games: Collection<GameParameters>) {
         allGames.clear()
         allGames.addAll(games)
-        allGames.sortBy { it.date }
+        allGames.sorted()
         notifyItemChanged(NumberConstants.ZERO, allGames.size)
     }
 

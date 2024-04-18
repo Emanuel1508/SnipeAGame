@@ -66,9 +66,7 @@ class MyGamesFragment : BaseFragment<FragmentMyGamesBinding>(FragmentMyGamesBind
     private fun setupListener() {
         with(binding) {
             myGamesSwipeRefresh.setOnRefreshListener {
-                viewModel.myGames.observe(viewLifecycleOwner) { games ->
-                    adapter.setMyGames(games)
-                }
+                viewModel.onRefresh()
                 myGamesSwipeRefresh.hideRefresh()
             }
         }

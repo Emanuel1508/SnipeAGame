@@ -92,6 +92,10 @@ class MyGamesViewModel @Inject constructor(
         hideLoading()
     }
 
+    fun onRefresh() {
+        getUserId()
+    }
+
     fun checkGamePastDue(date: Date) =
         date.before(Calendar.getInstance().time)
 }

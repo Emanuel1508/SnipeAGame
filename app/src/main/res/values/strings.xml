@@ -112,6 +112,8 @@
     <string name="no_games_were_found">No games were found</string>
     <string name="search_games">Search for games</string>
     <string name="invite_friend">Invite friend</string>
+    <string name="invite_string">"Hello, I would like to an invite you to an airsoft game, here is the invite code: "</string>
+    <string name="invite_through">Invite through</string>
     <!--Privacy Policy Screen-->
     <string name="privacy_policy_title">Privacy Policy</string>
     <string name="first_section">This privacy policy applies to the SnipeAGame app (hereby referred to as \'\'Application\'\') for mobile devices that was created by Pop Emanuel (hereby referred to as \'\'Service Provider\'\') as a Freemium service. This service is intended for use AS IS.</string>

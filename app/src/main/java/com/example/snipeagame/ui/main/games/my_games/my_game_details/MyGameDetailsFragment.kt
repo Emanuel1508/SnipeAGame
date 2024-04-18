@@ -14,10 +14,8 @@ import com.example.domain.utils.ErrorMessage
 import com.example.snipeagame.R
 import com.example.snipeagame.base.BaseFragment
 import com.example.snipeagame.databinding.FragmentMyGameDetailsBinding
-import com.example.snipeagame.ui.main.games.my_games.my_game_details.MyGameDetailsViewModel.IsAppInstalled
 import com.example.snipeagame.ui.main.games.my_games.my_game_details.MyGameDetailsViewModel.UiState
 import com.example.snipeagame.utils.AlertDialogFragment
-import com.example.snipeagame.utils.StringConstants
 import com.example.snipeagame.utils.hide
 import com.example.snipeagame.utils.mapToUI
 import com.example.snipeagame.utils.show
@@ -78,11 +76,7 @@ class MyGameDetailsFragment :
                     onRefresh()
                 }
                 inviteFriendButton.setOnClickListener {
-                    activity?.let {
-                        onInviteFriendPress(
-                            it.packageManager
-                        )
-                    }
+                    inviteFriend()
                 }
             }
         }
@@ -121,12 +115,6 @@ class MyGameDetailsFragment :
                     }
                 }
             }
-            appInstallationStatus.observe(viewLifecycleOwner) { installationStatus ->
-                when(installationStatus) {
-                    is IsAppInstalled.IsInstalled -> inviteFriend()
-                    is IsAppInstalled.NotInstalled -> showAlertDialog(ErrorMessage.WHATSAPP)
-                }
-            }
         }
     }
 
@@ -156,9 +144,11 @@ class MyGameDetailsFragment :
     private fun inviteFriend() {
         val intent = Intent(Intent.ACTION_SEND)
         intent.type = "text/plain"
-        intent.setPackage(StringConstants.WHATS_APP_PACKAGE)
-        intent.putExtra(Intent.EXTRA_TEXT, gameId)
-        context?.startActivity(intent)
+        intent.putExtra(
+            Intent.EXTRA_TEXT,
+            "${getString(R.string.invite_string)}$gameId"
+        )
+        context?.startActivity(Intent.createChooser(intent, getString(R.string.invite_through)))
     }
 
     private fun showAlertDialog(error: ErrorMessage) {

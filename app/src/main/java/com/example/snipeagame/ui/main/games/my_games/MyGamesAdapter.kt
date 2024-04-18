@@ -58,7 +58,7 @@ class MyGamesAdapter(private val myGameClickListener: MyGameClickListener) :
     fun setMyGames(games: List<GameParameters>) {
         myGames.clear()
         myGames.addAll(games)
-        myGames.sortBy { it.date }
+        myGames.sorted()
         notifyItemChanged(NumberConstants.ZERO, myGames.size)
     }
 

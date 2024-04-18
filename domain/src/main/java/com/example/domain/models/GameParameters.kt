@@ -1,5 +1,9 @@
 package com.example.domain.models
 
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+
 data class GameParameters(
     val gameId: String,
     val date: String,
@@ -7,7 +11,7 @@ data class GameParameters(
     val location: String,
     val numberOfPlayers: String,
     var currentPlayers: Int
-) {
+) : Comparable<GameParameters> {
     constructor() : this(
         "",
         "",
@@ -16,6 +20,10 @@ data class GameParameters(
         "",
         0
     )
+
+    override fun compareTo(other: GameParameters): Int {
+        return compareValuesBy(this, other, { it.formatDate() }, { it.time })
+    }
 }
 
 fun GameParameters.containsFilteringString(inputString: String): Boolean {
@@ -24,3 +32,10 @@ fun GameParameters.containsFilteringString(inputString: String): Boolean {
             this.time.contains(inputString) ||
             this.location.contains(inputString, ignoreCase = true))
 }
+
+fun GameParameters.formatDate(): Date? {
+    val dateFormatter = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+    return dateFormatter.parse(date)
+}
+
+
