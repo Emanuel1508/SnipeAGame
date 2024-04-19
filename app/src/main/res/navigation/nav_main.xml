@@ -60,4 +60,8 @@
             android:name="gameComplete"
             app:argType="boolean"/>
     </fragment>
+    <fragment
+        android:id="@+id/journal_fragment"
+        android:name="com.example.snipeagame.ui.main.journal.JournalFragment"
+        android:label="JournalFragment" />
 </navigation>

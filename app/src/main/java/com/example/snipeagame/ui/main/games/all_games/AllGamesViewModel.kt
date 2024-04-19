@@ -86,6 +86,7 @@ class AllGamesViewModel @Inject constructor(
         userId: String
     ) {
         game.currentPlayers++
+
         when (val response = joinGameUseCase(result.body, game, userId)) {
             is UseCaseResponse.Success -> hideLoading()
             is UseCaseResponse.Failure -> onDataFailure(response.error)

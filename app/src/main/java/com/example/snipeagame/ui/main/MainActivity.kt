@@ -47,6 +47,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     R.id.myProfile_fragment -> navController.navigate(R.id.myProfile_fragment)
                     R.id.games_fragment -> navController.navigate(R.id.games_fragment)
                     R.id.achievements_fragment -> navController.navigate(R.id.achievements_fragment)
+                    R.id.journal_fragment -> navController.navigate(R.id.journal_fragment)
                 }
                 true
             }
@@ -59,6 +60,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             R.id.myProfile_fragment -> title = getString(R.string.my_profile)
             R.id.games_fragment -> title = getString(R.string.games)
             R.id.achievements_fragment -> title = getString(R.string.achievements)
+            R.id.journal_fragment -> title = getString(R.string.journal)
         }
         binding.toolbar.toolbarTitle.text = title
     }

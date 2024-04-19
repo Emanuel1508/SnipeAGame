@@ -31,10 +31,6 @@ class AvailableAchievementsAdapter(
         setListeners(holder, achievement)
     }
 
-    fun notifyAchievementChange() {
-        notifyDataSetChanged()
-    }
-
     fun setAchievements(achievements: Collection<AchievementsParameters>) {
         availableAchievements.clear()
         availableAchievements.addAll(achievements)
@@ -66,8 +62,9 @@ class AvailableAchievementsAdapter(
         val position = availableAchievements.indexOf(achievement)
         holder.button.setOnClickListener {
             achievementClickListener.onAchievementClick(achievement)
-            availableAchievements.remove(achievement)
+            availableAchievements.removeAt(position)
             notifyItemRemoved(position)
+            notifyItemRangeChanged(NumberConstants.ZERO, availableAchievements.size)
         }
     }
 

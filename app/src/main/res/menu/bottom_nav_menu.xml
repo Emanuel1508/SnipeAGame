@@ -12,4 +12,9 @@
         android:id="@+id/myProfile_fragment"
         android:icon="@drawable/baseline_person_24"
         android:title="@string/my_profile" />
+
+    <item
+        android:id="@+id/journal_fragment"
+        android:icon="@drawable/baseline_book_24"
+        android:title="@string/journal"/>
 </menu>

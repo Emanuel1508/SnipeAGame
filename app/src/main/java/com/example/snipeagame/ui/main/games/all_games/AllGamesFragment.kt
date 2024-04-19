@@ -119,7 +119,6 @@ class AllGamesFragment : BaseFragment<FragmentAllGamesBinding>(FragmentAllGamesB
         }
     }
 
-
     private fun showAlertDialog(error: ErrorMessage) {
         val alertDialogFragment =
             AlertDialogFragment.newInstance(title = getString(R.string.oops_title),

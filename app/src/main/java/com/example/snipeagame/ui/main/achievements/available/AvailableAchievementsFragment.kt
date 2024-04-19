@@ -33,7 +33,6 @@ class AvailableAchievementsFragment :
             AvailableAchievementsAdapter.AchievementClickListener {
             override fun onAchievementClick(achievement: AchievementsParameters) {
                 viewModel.unlockAchievement(achievement)
-                updateAchievement()
             }
         })
         recyclerView = binding.availableAchievementsRecyclerView
@@ -60,12 +59,6 @@ class AvailableAchievementsFragment :
             availableAchievementsSwipeRefresh.setOnRefreshListener {
                 viewModel.onRefresh()
             }
-        }
-    }
-
-    private fun updateAchievement() {
-        recyclerView.post {
-            adapter.notifyAchievementChange()
         }
     }
 

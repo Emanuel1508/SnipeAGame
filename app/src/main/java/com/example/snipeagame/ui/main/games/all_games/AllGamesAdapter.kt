@@ -26,13 +26,6 @@ class AllGamesAdapter(private val gameClickListener: GameClickListener) :
         setupListeners(holder, game)
     }
 
-    fun setGames(games: Collection<GameParameters>) {
-        allGames.clear()
-        allGames.addAll(games)
-        allGames.sorted()
-        notifyItemChanged(NumberConstants.ZERO, allGames.size)
-    }
-
     override fun getItemCount() = allGames.size
 
     class ViewHolder(binding: ItemGameBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -66,11 +59,19 @@ class AllGamesAdapter(private val gameClickListener: GameClickListener) :
             gameClickListener.onGameClick(game)
             allGames.remove(game)
             notifyItemRemoved(position)
+            notifyItemRangeChanged(NumberConstants.ZERO, allGames.size)
         }
     }
 
     fun updateGames() {
         notifyDataSetChanged()
+    }
+
+    fun setGames(games: Collection<GameParameters>) {
+        allGames.clear()
+        allGames.addAll(games)
+        allGames.sorted()
+        notifyItemChanged(NumberConstants.ZERO, allGames.size)
     }
 
     interface GameClickListener {
