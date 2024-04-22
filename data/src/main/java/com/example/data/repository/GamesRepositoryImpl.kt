@@ -83,7 +83,7 @@ class GamesRepositoryImpl @Inject constructor(
                 .get()
                 .await()
             var myGames = documentToGameObject(myGamesDocumentSnapshot)
-            myGames = syncPlayerNumbers(myGames)
+            myGames = syncPlayerNumbers(userId, myGames)
             UseCaseResponse.Success(myGames)
         } catch (unknownHostException: UnknownHostException) {
             unknownHostException.getGamesError(ErrorMessage.NO_NETWORK)
@@ -265,7 +265,10 @@ class GamesRepositoryImpl @Inject constructor(
             .delete()
     }
 
-    private suspend fun syncPlayerNumbers(games: List<GameParameters>): List<GameParameters> {
+    private suspend fun syncPlayerNumbers(
+        userId: String,
+        games: List<GameParameters>
+    ): List<GameParameters> {
         games.forEach { game ->
             val formattedDate = formatDateAndTime(game)
             if (formattedDate.after(Calendar.getInstance().time)) {
@@ -275,9 +278,18 @@ class GamesRepositoryImpl @Inject constructor(
                     .await()
                 val number = document[DatabaseConstants.CURRENT_PLAYERS].toString()
                 game.currentPlayers = Integer.valueOf(number)
+                updateMyGamePlayerCount(userId, game.gameId, game.currentPlayers)
             }
         }
         return games
+    }
+
+    private fun updateMyGamePlayerCount(userId: String, gameId: String, playerCount: Int) {
+        firestore.collection(DatabaseConstants.PROFILES)
+            .document(userId)
+            .collection(DatabaseConstants.MY_GAMES)
+            .document(gameId)
+            .update(DatabaseConstants.CURRENT_PLAYERS, playerCount)
     }
 
     private suspend fun decreasePlayerNumbers(gameId: String) {

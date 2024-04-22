@@ -13,5 +13,6 @@ class DatabaseConstants {
         const val CURRENT_PLAYERS = "currentPlayers"
         const val TAKEDOWNS = "takedowns"
         const val GAME_COUNT = "games"
+        const val JOURNAL = "Journal"
     }
 }

@@ -6,7 +6,7 @@ import com.example.domain.utils.UseCaseResponse
 
 class CreateGameUseCase(private val gamesRepository: GamesRepository) {
     suspend operator fun invoke(
-        gameId:String,
+        gameId: String,
         date: String,
         time: String,
         location: String,
@@ -20,7 +20,6 @@ class CreateGameUseCase(private val gamesRepository: GamesRepository) {
             location = location,
             numberOfPlayers = numberOfPlayers,
             currentPlayers = currentPlayers
-
         )
         return gamesRepository.createGame(gameParameters)
     }

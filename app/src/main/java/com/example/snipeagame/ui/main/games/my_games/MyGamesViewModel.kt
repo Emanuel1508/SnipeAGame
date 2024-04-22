@@ -7,10 +7,12 @@ import com.example.domain.models.GameParameters
 import com.example.domain.usecases.FinishGameUseCase
 import com.example.domain.usecases.GetMyGamesUseCase
 import com.example.domain.usecases.GetUserIdUseCase
+import com.example.domain.usecases.SaveGameToJournalUseCase
 import com.example.domain.usecases.UserUpdateStatsUseCase
 import com.example.domain.utils.ErrorMessage
 import com.example.domain.utils.UseCaseResponse
 import com.example.snipeagame.base.BaseViewModel
+import com.example.snipeagame.utils.StringConstants
 import com.example.snipeagame.utils.convertDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -24,7 +26,8 @@ class MyGamesViewModel @Inject constructor(
     private val getMyGamesUseCase: GetMyGamesUseCase,
     private val getUserIdUseCase: GetUserIdUseCase,
     private val userUpdateStatsUseCase: UserUpdateStatsUseCase,
-    private val finishGameUseCase: FinishGameUseCase
+    private val finishGameUseCase: FinishGameUseCase,
+    private val saveGameToJournalUseCase: SaveGameToJournalUseCase
 ) :
     BaseViewModel() {
     private val _myGames = MutableLiveData<List<GameParameters>>()
@@ -66,20 +69,30 @@ class MyGamesViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             when (val response = userUpdateStatsUseCase(takedowns.toInt(), id)) {
                 is UseCaseResponse.Success -> {
-                    when (val result = finishGameUseCase(id, game.gameId)) {
+
+                    when (val saveToJournal = saveGameToJournalUseCase(
+                        gameId = game.gameId,
+                        userId = id,
+                        location = game.location,
+                        date = game.date,
+                        time = game.time,
+                        numberOfPlayers = game.currentPlayers.toString(),
+                        takedowns = takedowns,
+                        rating = StringConstants.EMPTY_STRING,
+                        journalText = StringConstants.EMPTY_STRING
+                    )) {
                         is UseCaseResponse.Success -> {
-                            showSuccess(result.body)
+                            finishGameUseCase(id, game.gameId)
                             hideLoading()
                         }
 
-                        is UseCaseResponse.Failure -> onDataFailure(result.error)
+                        is UseCaseResponse.Failure -> onDataFailure(saveToJournal.error)
                     }
                 }
 
                 is UseCaseResponse.Failure -> onDataFailure(response.error)
             }
         }
-
     }
 
     private fun onGameDataSuccess(gameParameters: List<GameParameters>) {

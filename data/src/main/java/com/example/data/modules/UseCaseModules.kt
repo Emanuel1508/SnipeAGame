@@ -3,6 +3,7 @@ package com.example.data.modules
 import com.example.domain.repositories.AchievementsRepository
 import com.example.domain.repositories.AuthenticationRepository
 import com.example.domain.repositories.GamesRepository
+import com.example.domain.repositories.JournalRepository
 import com.example.domain.repositories.UserRepository
 import com.example.domain.usecases.CreateGameUseCase
 import com.example.domain.usecases.CreateUserUseCase
@@ -20,6 +21,7 @@ import com.example.domain.usecases.GetUserIdUseCase
 import com.example.domain.usecases.GetUserStatsUseCase
 import com.example.domain.usecases.JoinGameUseCase
 import com.example.domain.usecases.LeaveGameUseCase
+import com.example.domain.usecases.SaveGameToJournalUseCase
 import com.example.domain.usecases.UnlockAchievementUseCase
 import com.example.domain.usecases.UpdateUserGroupsUseCase
 import com.example.domain.usecases.UserLoginUseCase
@@ -138,4 +140,9 @@ object UseCaseModules {
     @Provides
     fun provideUserStatsUseCase(repository: UserRepository) =
         GetUserStatsUseCase(repository)
+
+    @Singleton
+    @Provides
+    fun provideSaveGameToJournalUseCase(repository: JournalRepository) =
+        SaveGameToJournalUseCase(repository)
 }
