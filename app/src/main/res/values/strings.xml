@@ -106,7 +106,7 @@
     <string name="players">Players</string>
     <string name="game_complete">This game is over. Return to "My Games" \n section to complete it.</string>
     <string name="finish_game">Finish Game</string>
-    <string name="game_completed">Game completed</string>
+    <string name="game_completed">Game Completed</string>
     <string name="takedowns_hint">Insert takedowns</string>
     <string name="submit">Submit</string>
     <string name="takedown_error">Introduce a valid number</string>
@@ -124,4 +124,9 @@
     <string name="third_section">Only aggregated, anonymized data is periodically transmitted to external services to aid the Service Provider in improving the Application and their service. The Service Provider may share your information with third parties in the ways that are described in this privacy statement. The Service Provider may disclose User Provided and Automatically Collected Information: as required by law, such as to comply with a subpoena, or similar legal process; when they believe in good faith that disclosure is necessary to protect their rights, protect your safety or the safety of others, investigate fraud, or respond to a government request; with their trusted services providers who work on their behalf, do not have an independent use of the information we disclose to them, and have agreed to adhere to the rules set forth in this privacy statement.</string>
     <string name="your_consent">Your consent</string>
     <string name="consent">This Privacy Policy may be updated from time to time for any reason. The Service Provider will notify you of any changes to the Privacy Policy by updating this page with the new Privacy Policy. You are advised to consult this Privacy Policy regularly for any changes, as continued use is deemed approval of all changes. This privacy policy is effective as of 02/10/2023. By using the Application, you are consenting to the processing of your information as set forth in this Privacy Policy now and as amended by us.</string>
+    <!-- Journal Screen-->
+    <string name="location_icon">location_icon</string>
+    <string name="time_icon">time_icon</string>
+    <string name="edit_journal">Edit Journal</string>
+    <string name="journal_entry">Journal Entry</string>
 </resources>

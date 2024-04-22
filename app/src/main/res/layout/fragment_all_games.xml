@@ -27,7 +27,7 @@
             android:id="@+id/all_games_recyclerView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginBottom="@dimen/size_16"
+            android:layout_marginHorizontal="@dimen/size_8"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toTopOf="@id/createGame_button"
             app:layout_constraintTop_toBottomOf="@id/allGames_searchBar" />

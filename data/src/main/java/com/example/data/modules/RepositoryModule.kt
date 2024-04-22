@@ -3,10 +3,12 @@ package com.example.data.modules
 import com.example.data.repository.AchievementsRepositoryImpl
 import com.example.data.repository.AuthenticationRepositoryImpl
 import com.example.data.repository.GamesRepositoryImpl
+import com.example.data.repository.JournalRepositoryImpl
 import com.example.data.repository.UserRepositoryImpl
 import com.example.domain.repositories.AchievementsRepository
 import com.example.domain.repositories.AuthenticationRepository
 import com.example.domain.repositories.GamesRepository
+import com.example.domain.repositories.JournalRepository
 import com.example.domain.repositories.UserRepository
 import dagger.Binds
 import dagger.Module
@@ -27,5 +29,8 @@ abstract class RepositoryModule {
 
     @Binds
     abstract fun bindGamesRepository(gamesRepositoryImpl: GamesRepositoryImpl): GamesRepository
+
+    @Binds
+    abstract fun bindJournalRepository(journalRepositoryImpl: JournalRepositoryImpl): JournalRepository
 
 }
