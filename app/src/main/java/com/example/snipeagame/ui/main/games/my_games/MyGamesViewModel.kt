@@ -62,39 +62,6 @@ class MyGamesViewModel @Inject constructor(
         }
     }
 
-    fun formatDateAndTime(game: GameParameters) = convertDate(game)
-
-    fun onGameFinish(takedowns: String, game: GameParameters) {
-        showLoading()
-        viewModelScope.launch(Dispatchers.IO) {
-            when (val response = userUpdateStatsUseCase(takedowns.toInt(), id)) {
-                is UseCaseResponse.Success -> {
-
-                    when (val saveToJournal = saveGameToJournalUseCase(
-                        gameId = game.gameId,
-                        userId = id,
-                        location = game.location,
-                        date = game.date,
-                        time = game.time,
-                        numberOfPlayers = game.currentPlayers.toString(),
-                        takedowns = takedowns,
-                        rating = StringConstants.EMPTY_STRING,
-                        journalText = StringConstants.EMPTY_STRING
-                    )) {
-                        is UseCaseResponse.Success -> {
-                            finishGameUseCase(id, game.gameId)
-                            hideLoading()
-                        }
-
-                        is UseCaseResponse.Failure -> onDataFailure(saveToJournal.error)
-                    }
-                }
-
-                is UseCaseResponse.Failure -> onDataFailure(response.error)
-            }
-        }
-    }
-
     private fun onGameDataSuccess(gameParameters: List<GameParameters>) {
         _myGames.postValue(gameParameters)
         hideLoading()
@@ -105,10 +72,57 @@ class MyGamesViewModel @Inject constructor(
         hideLoading()
     }
 
+    fun formatDateAndTime(game: GameParameters) = convertDate(game)
+
+    fun onGameFinish(takedowns: String, game: GameParameters, isChecked: Boolean) {
+        showLoading()
+        viewModelScope.launch(Dispatchers.IO) {
+            when (val response = userUpdateStatsUseCase(takedowns.toInt(), id)) {
+                is UseCaseResponse.Success -> {
+                    if (isChecked) {
+                        saveToJournal(game, takedowns)
+                    } else {
+                        when (val result = finishGameUseCase(id, game.gameId)) {
+                            is UseCaseResponse.Success -> hideLoading()
+                            is UseCaseResponse.Failure -> showError(result.error)
+                        }
+                    }
+                }
+
+                is UseCaseResponse.Failure -> onDataFailure(response.error)
+            }
+        }
+    }
+
+    private suspend fun saveToJournal(
+        game: GameParameters,
+        takedowns: String
+    ) {
+        when (val saveToJournal = saveGameToJournalUseCase(
+            gameId = game.gameId,
+            userId = id,
+            location = game.location,
+            date = game.date,
+            time = game.time,
+            numberOfPlayers = game.currentPlayers.toString(),
+            takedowns = takedowns,
+            rating = StringConstants.EMPTY_STRING,
+            journalText = StringConstants.EMPTY_STRING
+        )) {
+            is UseCaseResponse.Success -> {
+                finishGameUseCase(id, game.gameId)
+                hideLoading()
+            }
+
+            is UseCaseResponse.Failure -> onDataFailure(saveToJournal.error)
+        }
+    }
+
     fun onRefresh() {
         getUserId()
     }
 
     fun checkGamePastDue(date: Date) =
         date.before(Calendar.getInstance().time)
+
 }

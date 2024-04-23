@@ -123,7 +123,7 @@ class AllGamesFragment : BaseFragment<FragmentAllGamesBinding>(FragmentAllGamesB
         val alertDialogFragment =
             AlertDialogFragment.newInstance(title = getString(R.string.oops_title),
                 description = getString(error.mapToUI()),
-                onRetryClick = {})
+                onRetryClick = {viewModel.onRefresh()})
         alertDialogFragment.show(parentFragmentManager, TAG)
     }
 

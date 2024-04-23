@@ -72,7 +72,6 @@ class MyGamesFragment : BaseFragment<FragmentMyGamesBinding>(FragmentMyGamesBind
         }
     }
 
-
     private fun navigateToGameDetails(game: GameParameters) {
         var isGameCompleted: Boolean
 
@@ -99,8 +98,8 @@ class MyGamesFragment : BaseFragment<FragmentMyGamesBinding>(FragmentMyGamesBind
     private fun showGameCompleteDialog(game: GameParameters) {
         val gameCompleteDialogFragment =
             GameCompleteDialogFragment.newInstance(
-                onSubmitClick = { inputText ->
-                    viewModel.onGameFinish(inputText, game)
+                onSubmitClick = { inputText, isChecked ->
+                    viewModel.onGameFinish(inputText, game, isChecked)
                     adapter.finishGame(game)
                 },
                 playerCount = game.currentPlayers

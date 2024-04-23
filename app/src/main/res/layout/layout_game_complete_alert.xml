@@ -32,6 +32,12 @@
             android:inputType="number" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <CheckBox
+        android:id="@+id/checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_to_journal"/>
+
     <LinearLayout
         android:id="@+id/button_linearLayout"
         android:layout_width="wrap_content"

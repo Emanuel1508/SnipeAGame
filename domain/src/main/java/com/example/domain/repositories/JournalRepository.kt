@@ -5,4 +5,6 @@ import com.example.domain.utils.UseCaseResponse
 
 interface JournalRepository {
     suspend fun saveGameToJournal(journalData: JournalParameters): UseCaseResponse<String>
+
+    suspend fun getJournalEntries(userId: String): UseCaseResponse<List<JournalParameters>>
 }
