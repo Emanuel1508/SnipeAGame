@@ -3,6 +3,7 @@ package com.example.snipeagame.ui.main.journal
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.models.JournalParameters
 import com.example.domain.utils.ErrorMessage
@@ -30,7 +31,11 @@ class JournalFragment : BaseFragment<FragmentJournalBinding>(FragmentJournalBind
     private fun setupAdapter() {
         adapter = JournalAdapter(object : JournalAdapter.JournalItemClickListener {
             override fun onJournalItemClick(journal: JournalParameters) {
-                TODO("Not yet implemented")
+                findNavController()
+                    .navigate(
+                        JournalFragmentDirections
+                            .actionJournalFragmentToJournalDetailsFragment(journal.gameId)
+                    )
             }
         })
         recyclerView = binding.recyclerView

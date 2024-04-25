@@ -40,7 +40,7 @@ class UnlockedAchievementsAdapter : RecyclerView.Adapter<UnlockedAchievementsAda
     private fun setViews(holder: ViewHolder, achievement: AchievementsParameters) {
         holder.apply {
             achievement.apply {
-                imageView.setImageResource(R.drawable.check_mark)
+                imageView.setImageResource(R.drawable.medal)
                 titleTextView.text = title
                 descriptionTextView.text = description
                 button.isVisible = false

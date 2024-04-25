@@ -12,6 +12,7 @@ import com.example.domain.usecases.ForgotPasswordUseCase
 import com.example.domain.usecases.GetAvailableAchievementsUseCase
 import com.example.domain.usecases.GetFactionUseCase
 import com.example.domain.usecases.GetGamesUseCase
+import com.example.domain.usecases.GetJournalDetailsUseCase
 import com.example.domain.usecases.GetJournalEntriesUseCase
 import com.example.domain.usecases.GetMyGamesUseCase
 import com.example.domain.usecases.GetPlayersUseCase
@@ -151,4 +152,9 @@ object UseCaseModules {
     @Provides
     fun provideGetJournalEntriesUseCase(repository: JournalRepository) =
         GetJournalEntriesUseCase(repository)
+
+    @Singleton
+    @Provides
+    fun provideGetJournalDetailsUseCase(repository: JournalRepository) =
+        GetJournalDetailsUseCase(repository)
 }

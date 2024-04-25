@@ -10,6 +10,7 @@ import com.example.domain.usecases.GetUserIdUseCase
 import com.example.domain.usecases.SaveGameToJournalUseCase
 import com.example.domain.usecases.UserUpdateStatsUseCase
 import com.example.domain.utils.ErrorMessage
+import com.example.domain.utils.NumberConstants
 import com.example.domain.utils.UseCaseResponse
 import com.example.snipeagame.base.BaseViewModel
 import com.example.snipeagame.utils.StringConstants
@@ -106,7 +107,7 @@ class MyGamesViewModel @Inject constructor(
             time = game.time,
             numberOfPlayers = game.currentPlayers.toString(),
             takedowns = takedowns,
-            rating = StringConstants.EMPTY_STRING,
+            rating = NumberConstants.ZERO_FLOAT.toString(),
             journalText = StringConstants.EMPTY_STRING
         )) {
             is UseCaseResponse.Success -> {

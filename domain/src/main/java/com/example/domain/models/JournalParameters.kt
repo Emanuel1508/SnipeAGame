@@ -8,7 +8,7 @@ data class JournalParameters(
     val time: String,
     val numberOfPlayers: String,
     val takedowns: String,
-    val rating: String,
+    var rating: String,
     val journalText: String,
 ) {
     constructor() : this(

@@ -47,6 +47,30 @@ class JournalRepositoryImpl @Inject constructor(private val firestore: FirebaseF
         }
     }
 
+    override suspend fun getJournalDetails(
+        userId: String,
+        journalId: String
+    ): UseCaseResponse<JournalParameters> {
+        return try {
+            val documentSnapshot = firestore.collection(DatabaseConstants.PROFILES)
+                .document(userId)
+                .collection(DatabaseConstants.JOURNAL)
+                .document(journalId)
+                .get()
+                .await()
+            val journalDetailsData: JournalParameters? =
+                documentSnapshot.toObject(JournalParameters::class.java)
+            if (journalDetailsData != null)
+                UseCaseResponse.Success(journalDetailsData)
+            else
+                UseCaseResponse.Failure(ErrorMessage.GENERAL)
+        } catch (unknownHostException: UnknownHostException) {
+            unknownHostException.getJournalError(ErrorMessage.NO_NETWORK)
+        } catch (exception: Exception) {
+            exception.getJournalError(ErrorMessage.GENERAL)
+        }
+    }
+
     private fun documentToJournalObject(documents: QuerySnapshot): List<JournalParameters> {
         val list: ArrayList<JournalParameters> = ArrayList()
         for (document in documents) {

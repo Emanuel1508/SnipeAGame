@@ -63,5 +63,20 @@
     <fragment
         android:id="@+id/journal_fragment"
         android:name="com.example.snipeagame.ui.main.journal.JournalFragment"
-        android:label="JournalFragment" />
+        android:label="JournalFragment" >
+        <action
+            android:id="@+id/action_journal_fragment_to_journalDetailsFragment"
+            app:destination="@id/journalDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/journalDetailsFragment"
+        android:name="com.example.snipeagame.ui.main.journal.journal_details.JournalDetailsFragment"
+        android:label="JournalDetailsFragment" >
+        <action
+            android:id="@+id/action_journalDetailsFragment_to_journal_fragment"
+            app:destination="@id/journal_fragment" />
+        <argument
+            android:name="journalId"
+            app:argType="string"/>
+    </fragment>
 </navigation>
