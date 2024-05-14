@@ -3,6 +3,7 @@ package com.example.data.repository
 import com.example.data.utils.DatabaseConstants
 import com.example.data.utils.StringConstants
 import com.example.domain.models.JournalParameters
+import com.example.domain.models.JournalUpdateParameters
 import com.example.domain.repositories.JournalRepository
 import com.example.domain.utils.ErrorMessage
 import com.example.domain.utils.UseCaseResponse
@@ -69,6 +70,33 @@ class JournalRepositoryImpl @Inject constructor(private val firestore: FirebaseF
         } catch (exception: Exception) {
             exception.getJournalError(ErrorMessage.GENERAL)
         }
+    }
+
+    override suspend fun updateJournalDetails(
+        journalUpdateParameters: JournalUpdateParameters
+    ): UseCaseResponse<String> {
+        return try {
+            updateJournal(journalUpdateParameters)
+            UseCaseResponse.Success(StringConstants.SUCCESS)
+        } catch (unknownHostException: UnknownHostException) {
+            unknownHostException.getJournalError(ErrorMessage.NO_NETWORK)
+        } catch (exception: Exception) {
+            exception.getJournalError(ErrorMessage.GENERAL)
+        }
+    }
+
+    private fun updateJournal(journalUpdateParameters: JournalUpdateParameters) {
+        firestore.collection(DatabaseConstants.PROFILES)
+            .document(journalUpdateParameters.userId)
+            .collection(DatabaseConstants.JOURNAL)
+            .document(journalUpdateParameters.journalId)
+            .update(DatabaseConstants.JOURNAL_TEXT, journalUpdateParameters.journalText)
+
+        firestore.collection(DatabaseConstants.PROFILES)
+            .document(journalUpdateParameters.userId)
+            .collection(DatabaseConstants.JOURNAL)
+            .document(journalUpdateParameters.journalId)
+            .update(DatabaseConstants.JOURNAL_RATING, journalUpdateParameters.rating)
     }
 
     private fun documentToJournalObject(documents: QuerySnapshot): List<JournalParameters> {

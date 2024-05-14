@@ -67,10 +67,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     private fun setupToolbarVisibility(id: Int) {
         with(binding) {
-            when (id) {
-                R.id.createGameFragment -> toolbar.mainToolbar.hide()
-                R.id.myGameDetailsFragment -> toolbar.mainToolbar.hide()
-                else -> toolbar.mainToolbar.show()
+            with(toolbar) {
+                when (id) {
+                    R.id.createGameFragment,
+                    R.id.myGameDetailsFragment,
+                    R.id.journalDetailsFragment -> mainToolbar.hide()
+
+                    else -> mainToolbar.show()
+                }
             }
         }
     }
@@ -78,10 +82,16 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     private fun navigationVisibility(navController: NavController) {
         with(binding) {
             navController.addOnDestinationChangedListener { _, destination, _ ->
-                if (destination.id == R.id.createGameFragment) {
-                    mainBottomNavigation.gone()
-                } else {
-                    mainBottomNavigation.show()
+                when (destination.id) {
+                    R.id.createGameFragment,
+                    R.id.myGameDetailsFragment,
+                    R.id.journalDetailsFragment -> {
+                        mainBottomNavigation.gone()
+                    }
+
+                    else -> {
+                        mainBottomNavigation.show()
+                    }
                 }
             }
         }

@@ -4,8 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.domain.models.JournalParameters
+import com.example.domain.models.JournalUpdateParameters
 import com.example.domain.usecases.GetJournalDetailsUseCase
 import com.example.domain.usecases.GetUserIdUseCase
+import com.example.domain.usecases.UpdateJournalUseCase
 import com.example.domain.utils.ErrorMessage
 import com.example.domain.utils.UseCaseResponse
 import com.example.snipeagame.base.BaseViewModel
@@ -17,39 +19,51 @@ import javax.inject.Inject
 @HiltViewModel
 class JournalDetailsViewModel @Inject constructor(
     private var getUserIdUseCase: GetUserIdUseCase,
-    private var getJournalDetailsUseCase: GetJournalDetailsUseCase
+    private var getJournalDetailsUseCase: GetJournalDetailsUseCase,
+    private var updateJournalUseCase: UpdateJournalUseCase
 ) : BaseViewModel() {
     private var _journalDetailsData = MutableLiveData<JournalParameters>()
     var journalDetailsData: LiveData<JournalParameters> = _journalDetailsData
 
+    private var _isEditing = MutableLiveData<Boolean>()
+    val isEditing: LiveData<Boolean> = _isEditing
+
     private var journalId: String = ""
+    private var userId: String = ""
 
     private val TAG = this::class.java.simpleName
 
     init {
-        getJournalDetailsData()
+        _isEditing.value = false
+        getUserId()
+    }
+
+    private fun getUserId() {
+        showLoading()
+        viewModelScope.launch(Dispatchers.IO) {
+            when (val response = getUserIdUseCase()) {
+                is UseCaseResponse.Success -> {
+                    userId = response.body
+                    getJournalDetailsData()
+                }
+
+                is UseCaseResponse.Failure -> showError(response.error)
+            }
+        }
+        hideLoading()
     }
 
     private fun getJournalDetailsData() {
         showLoading()
         viewModelScope.launch(Dispatchers.IO) {
-            when (val response = getUserIdUseCase()) {
+            when (val journalDataResponse = getJournalDetailsUseCase(userId, journalId)) {
                 is UseCaseResponse.Success -> {
-                    onGetUserIdSuccess(response.body)
+                    onGetJournalDetailsSuccess(journalDataResponse.body)
                 }
 
                 is UseCaseResponse.Failure -> {
-                    onDataFailure(response.error)
+                    onDataFailure(journalDataResponse.error)
                 }
-            }
-        }
-    }
-
-    private suspend fun onGetUserIdSuccess(userId: String) {
-        when (val journalDataResponse = getJournalDetailsUseCase(userId, journalId)) {
-            is UseCaseResponse.Success -> onGetJournalDetailsSuccess(journalDataResponse.body)
-            is UseCaseResponse.Failure -> {
-                showError(journalDataResponse.error)
             }
         }
         hideLoading()
@@ -77,8 +91,44 @@ class JournalDetailsViewModel @Inject constructor(
         hideLoading()
     }
 
+    private fun updateJournal(journalUpdateParameters: JournalUpdateParameters) {
+        showLoading()
+        viewModelScope.launch(Dispatchers.IO) {
+            with(journalUpdateParameters) {
+                when (val updateResponse = updateJournalUseCase(
+                    userId,
+                    journalId,
+                    rating,
+                    journalText
+                )) {
+                    is UseCaseResponse.Success -> getJournalDetailsUseCase(userId, journalId)
+                    is UseCaseResponse.Failure -> showError(updateResponse.error)
+                }
+            }
+            hideLoading()
+        }
+    }
+
+    fun onEditButtonClick(journalText: String, rating: String) {
+        if (_isEditing.value == true) {
+            val journalUpdateParameters = JournalUpdateParameters(
+                userId = userId,
+                journalId = journalId,
+                rating = rating,
+                journalText = journalText
+            )
+            updateJournal(journalUpdateParameters)
+        }
+        _isEditing.value?.let { editValue ->
+            _isEditing.value = !editValue
+        }
+    }
 
     fun setJournalId(id: String) {
         journalId = id
+    }
+
+    fun onRefresh() {
+        getJournalDetailsData()
     }
 }

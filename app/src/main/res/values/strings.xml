@@ -130,4 +130,7 @@
     <string name="edit_journal">Edit Journal</string>
     <string name="journal_entry">Journal Entry</string>
     <string name="add_to_journal">Check to add game to journal</string>
+    <string name="takedown_icon">takedown_icon</string>
+    <string name="introduce_journal_text_here">Introduce journal text here</string>
+    <string name="save_journal">Save Changes</string>
 </resources>

@@ -14,5 +14,7 @@ class DatabaseConstants {
         const val TAKEDOWNS = "takedowns"
         const val GAME_COUNT = "games"
         const val JOURNAL = "Journal"
+        const val JOURNAL_TEXT = "journalText"
+        const val JOURNAL_RATING = "rating"
     }
 }
