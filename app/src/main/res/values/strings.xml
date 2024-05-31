@@ -133,4 +133,6 @@
     <string name="takedown_icon">takedown_icon</string>
     <string name="introduce_journal_text_here">Introduce journal text here</string>
     <string name="save_journal">Save Changes</string>
+    <string name="upload_images">Upload Images</string>
+    <string name="image_note">The changes will be shown after pressing the save button</string>
 </resources>

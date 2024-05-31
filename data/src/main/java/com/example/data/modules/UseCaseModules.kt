@@ -24,6 +24,7 @@ import com.example.domain.usecases.GetUserStatsUseCase
 import com.example.domain.usecases.JoinGameUseCase
 import com.example.domain.usecases.LeaveGameUseCase
 import com.example.domain.usecases.SaveGameToJournalUseCase
+import com.example.domain.usecases.SaveJournalImagesUseCase
 import com.example.domain.usecases.UnlockAchievementUseCase
 import com.example.domain.usecases.UpdateJournalUseCase
 import com.example.domain.usecases.UpdateUserGroupsUseCase
@@ -163,4 +164,9 @@ object UseCaseModules {
     @Provides
     fun provideUpdateJournalUseCase(repository: JournalRepository) =
         UpdateJournalUseCase(repository)
+
+    @Singleton
+    @Provides
+    fun provideSaveJournalImagesUseCase(repository: JournalRepository) =
+        SaveJournalImagesUseCase(repository)
 }

@@ -1,5 +1,6 @@
 package com.example.snipeagame.ui.main.journal.journal_details
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -7,6 +8,7 @@ import com.example.domain.models.JournalParameters
 import com.example.domain.models.JournalUpdateParameters
 import com.example.domain.usecases.GetJournalDetailsUseCase
 import com.example.domain.usecases.GetUserIdUseCase
+import com.example.domain.usecases.SaveJournalImagesUseCase
 import com.example.domain.usecases.UpdateJournalUseCase
 import com.example.domain.utils.ErrorMessage
 import com.example.domain.utils.UseCaseResponse
@@ -20,7 +22,8 @@ import javax.inject.Inject
 class JournalDetailsViewModel @Inject constructor(
     private var getUserIdUseCase: GetUserIdUseCase,
     private var getJournalDetailsUseCase: GetJournalDetailsUseCase,
-    private var updateJournalUseCase: UpdateJournalUseCase
+    private var updateJournalUseCase: UpdateJournalUseCase,
+    private var saveJournalImagesUseCase: SaveJournalImagesUseCase
 ) : BaseViewModel() {
     private var _journalDetailsData = MutableLiveData<JournalParameters>()
     var journalDetailsData: LiveData<JournalParameters> = _journalDetailsData
@@ -81,7 +84,8 @@ class JournalDetailsViewModel @Inject constructor(
                 journalDetails.numberOfPlayers,
                 journalDetails.takedowns,
                 journalDetails.rating,
-                journalDetails.journalText
+                journalDetails.journalText,
+                journalDetails.imageUrls
             )
         )
     }
@@ -101,7 +105,7 @@ class JournalDetailsViewModel @Inject constructor(
                     rating,
                     journalText
                 )) {
-                    is UseCaseResponse.Success -> getJournalDetailsUseCase(userId, journalId)
+                    is UseCaseResponse.Success -> getJournalDetailsData()
                     is UseCaseResponse.Failure -> showError(updateResponse.error)
                 }
             }
@@ -130,5 +134,16 @@ class JournalDetailsViewModel @Inject constructor(
 
     fun onRefresh() {
         getJournalDetailsData()
+    }
+
+    fun handleSelectedImages(imageUris: MutableList<Uri>) {
+        showLoading()
+        viewModelScope.launch(Dispatchers.IO) {
+            when (val result = saveJournalImagesUseCase(imageUris, userId, journalId)) {
+                is UseCaseResponse.Success -> showSuccess(result.body)
+                is UseCaseResponse.Failure -> showError(result.error)
+            }
+            hideLoading()
+        }
     }
 }

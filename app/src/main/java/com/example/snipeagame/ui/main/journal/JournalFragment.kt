@@ -23,9 +23,18 @@ class JournalFragment : BaseFragment<FragmentJournalBinding>(FragmentJournalBind
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupListener()
         setupAdapter()
         setupObservers()
         setupLoading()
+    }
+
+    private fun setupListener() {
+        with(binding) {
+            swipeRefresh.setOnRefreshListener {
+                viewModel.onRefresh()
+            }
+        }
     }
 
     private fun setupAdapter() {

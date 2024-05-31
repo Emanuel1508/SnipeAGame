@@ -1,13 +1,22 @@
 package com.example.snipeagame.ui.main.journal.journal_details
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.example.domain.models.JournalParameters
@@ -29,8 +38,13 @@ class JournalDetailsFragment :
     BaseFragment<FragmentJournalDetailsBinding>(FragmentJournalDetailsBinding::inflate) {
     private val viewModel: JournalDetailsViewModel by viewModels()
     private lateinit var journalId: String
-
+    private lateinit var adapter: JournalDetailsAdapter
     private val TAG = this::class.java.simpleName
+    private val imageUris = mutableListOf<Uri>()
+    private val pickImageLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            handlePickedImage(result)
+        }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -39,6 +53,17 @@ class JournalDetailsFragment :
         setupListeners()
         setupLoading()
         setupObservers()
+        setupAdapter()
+        setupToolbar()
+    }
+
+    private fun passJournalId() {
+        viewModel.setJournalId(journalId)
+    }
+
+    private fun getJournalId() {
+        val args: JournalDetailsFragmentArgs by navArgs()
+        journalId = args.journalId
     }
 
     private fun setupListeners() {
@@ -59,8 +84,20 @@ class JournalDetailsFragment :
             swipeRefresh.setOnRefreshListener {
                 viewModel.onRefresh()
             }
+            uploadImageButton.setOnClickListener {
+                setupImagePickIntent(pickImageLauncher)
+            }
         }
         setupInputTextListener()
+    }
+
+    private fun setupImagePickIntent(pickImageLauncher: ActivityResultLauncher<Intent>) {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+            type = "image/*"
+            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+            addCategory(Intent.CATEGORY_OPENABLE)
+        }
+        pickImageLauncher.launch(Intent.createChooser(intent, "Select pictures"))
     }
 
     private fun setupLoading() {
@@ -79,6 +116,7 @@ class JournalDetailsFragment :
             }
             journalDetailsData.observe(viewLifecycleOwner) { journalDetails ->
                 setupUI(journalDetails)
+                adapter.setupJournalImages(journalDetails.imageUrls)
             }
             isEditing.observe(viewLifecycleOwner) { editValue ->
                 updateUIEditState(editValue)
@@ -86,19 +124,17 @@ class JournalDetailsFragment :
         }
     }
 
-    private fun passJournalId() {
-        viewModel.setJournalId(journalId)
+    private fun setupAdapter() {
+        adapter = JournalDetailsAdapter()
+        val recyclerView = binding.recyclerView
+        recyclerView.adapter = adapter
     }
 
-    private fun getJournalId() {
-        val args: JournalDetailsFragmentArgs by navArgs()
-        journalId = args.journalId
-    }
-
-    private fun updateRefreshAnimation(value: Result.Loading) {
-        when (value.shouldShowLoading) {
-            true -> showLoadingAnimation()
-            false -> hideLoadingAnimation()
+    private fun setupToolbar() {
+        val toolbar: Toolbar = binding.toolbar
+        (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
+        toolbar.setNavigationOnClickListener {
+            requireActivity().supportFragmentManager.popBackStack()
         }
     }
 
@@ -140,6 +176,8 @@ class JournalDetailsFragment :
                     journalTextView.hide()
                     journalCardView.hide()
                     editButton.text = getString(R.string.save_journal)
+                    uploadImageButton.show()
+                    changesTextView.show()
                 }
 
                 false -> {
@@ -149,8 +187,17 @@ class JournalDetailsFragment :
                     journalTextView.show()
                     journalCardView.show()
                     editButton.text = getString(R.string.edit_journal)
+                    uploadImageButton.hide()
+                    changesTextView.hide()
                 }
             }
+        }
+    }
+
+    private fun updateRefreshAnimation(value: Result.Loading) {
+        when (value.shouldShowLoading) {
+            true -> showLoadingAnimation()
+            false -> hideLoadingAnimation()
         }
     }
 
@@ -172,6 +219,24 @@ class JournalDetailsFragment :
         }
     }
 
+    private fun handlePickedImage(result: ActivityResult) {
+        if (result.resultCode == Activity.RESULT_OK) {
+            val data: Intent? = result.data
+            if (data?.clipData != null) {
+                val count = data.clipData!!.itemCount
+                for (i in 0 until count) {
+                    val imageUri = data.clipData!!.getItemAt(i).uri
+                    imageUris.add(imageUri)
+                }
+            } else if (data?.data != null) {
+                imageUris.add(data.data!!)
+            }
+            viewModel.handleSelectedImages(imageUris)
+        } else {
+            Log.v(TAG, "Image selection cancelled or failed")
+        }
+    }
+
     private fun handleFocus(view: TextView) {
         Handler().postDelayed({
             view.clearFocus()
@@ -182,7 +247,7 @@ class JournalDetailsFragment :
         val alertDialogFragment =
             AlertDialogFragment.newInstance(title = getString(R.string.oops_title),
                 description = getString(error.mapToUI()),
-                onRetryClick = {})
+                onRetryClick = { viewModel.onRefresh() })
         alertDialogFragment.show(parentFragmentManager, TAG)
     }
 }

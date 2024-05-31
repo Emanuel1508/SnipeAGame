@@ -40,4 +40,5 @@ ext {
     navVersion='2.7.4'
     firebaseBomVersion = '32.3.1'
     swipeLayoutVersion = '1.1.0'
+    picassoVersion = '2.8'
 }

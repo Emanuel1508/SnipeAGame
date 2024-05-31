@@ -16,5 +16,6 @@ class DatabaseConstants {
         const val JOURNAL = "Journal"
         const val JOURNAL_TEXT = "journalText"
         const val JOURNAL_RATING = "rating"
+        const val IMAGE_URLS = "imageUrls"
     }
 }

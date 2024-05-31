@@ -108,7 +108,8 @@ class MyGamesViewModel @Inject constructor(
             numberOfPlayers = game.currentPlayers.toString(),
             takedowns = takedowns,
             rating = NumberConstants.ZERO_FLOAT.toString(),
-            journalText = StringConstants.EMPTY_STRING
+            journalText = StringConstants.EMPTY_STRING,
+            imageUrls = arrayListOf()
         )) {
             is UseCaseResponse.Success -> {
                 finishGameUseCase(id, game.gameId)

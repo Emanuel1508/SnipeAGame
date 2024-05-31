@@ -55,4 +55,8 @@ class JournalViewModel @Inject constructor(
         _journalEntries.postValue(journalList)
         hideLoading()
     }
+
+    fun onRefresh() {
+        getUserId()
+    }
 }

@@ -14,7 +14,8 @@ class SaveGameToJournalUseCase(private val journalRepository: JournalRepository)
         numberOfPlayers: String,
         takedowns: String,
         rating: String,
-        journalText: String
+        journalText: String,
+        imageUrls: ArrayList<String>
     ): UseCaseResponse<String> {
         val journalParameters = JournalParameters(
             gameId = gameId,
@@ -25,7 +26,8 @@ class SaveGameToJournalUseCase(private val journalRepository: JournalRepository)
             numberOfPlayers = numberOfPlayers,
             takedowns = takedowns,
             rating = rating,
-            journalText = journalText
+            journalText = journalText,
+            imageUrls = imageUrls
         )
         return journalRepository.saveGameToJournal(journalParameters)
     }
