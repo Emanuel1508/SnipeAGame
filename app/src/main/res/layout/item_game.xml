@@ -3,68 +3,173 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/item_cardView"
     android:layout_width="match_parent"
-    android:backgroundTint="@color/pale_green"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/size_16"
+    android:backgroundTint="@color/pale_green"
     app:cardCornerRadius="@dimen/size_16">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/achievement_constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/size_4"
+            android:layout_marginTop="@dimen/size_8"
+            android:background="@color/light_gray"
+            app:cardCornerRadius="@dimen/size_24"
+            app:layout_constraintEnd_toEndOf="@id/first_guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/location_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/size_4"
+                    android:gravity="center"
+                    app:drawableTopCompat="@drawable/location"
+                    tools:text="Cluj-Napoca" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/date_cardView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/size_4"
+            android:layout_marginTop="@dimen/size_8"
+            android:background="@color/light_gray"
+            app:cardCornerRadius="@dimen/size_24"
+            app:layout_constraintEnd_toEndOf="@id/second_guideline"
+            app:layout_constraintStart_toStartOf="@id/first_guideline"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/date_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/size_4"
+                    android:gravity="center"
+                    app:drawableTopCompat="@drawable/calendar"
+                    tools:text="2024-10-10" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/size_4"
+            android:layout_marginTop="@dimen/size_8"
+            android:background="@color/light_gray"
+            app:cardCornerRadius="@dimen/size_24"
+            app:layout_constraintEnd_toEndOf="@id/third_guideline"
+            app:layout_constraintStart_toEndOf="@id/second_guideline"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/time_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/size_4"
+                    android:gravity="center"
+                    app:drawableTopCompat="@drawable/time"
+                    tools:text="15:30" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/size_4"
+            android:layout_marginTop="@dimen/size_8"
+            android:background="@color/light_gray"
+            app:cardCornerRadius="@dimen/size_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/third_guideline"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/players_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/size_4"
+                    android:gravity="center"
+                    app:drawableTopCompat="@drawable/soldier"
+                    tools:text="0/10" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/first_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.25" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/second_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/third_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.75" />
 
         <TextView
-            android:id="@+id/gameDate_textView"
-            style="@style/MediumTitleText"
+            android:id="@+id/tap_textView"
+            style="@style/HintText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/size_8"
+            android:text="@string/tap_for_more_information"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Date" />
-
-        <TextView
-            android:id="@+id/gameTime_textView"
-            style="@style/MediumTitleText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/size_8"
-            app:layout_constraintBottom_toTopOf="@id/gameLocation_textView"
-            app:layout_constraintTop_toBottomOf="@id/gameDate_textView"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:text="Time" />
-
-        <TextView
-            android:id="@+id/gameLocation_textView"
-            style="@style/MediumTitleText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/size_8"
-            app:layout_constraintTop_toBottomOf="@id/gameTime_textView"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:text="Location" />
-
-        <TextView
-            android:id="@+id/gameNumberOfPlayers_textView"
-            style="@style/MediumTitleText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/size_8"
-            app:layout_constraintTop_toBottomOf="@id/gameLocation_textView"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:text="Players" />
+            app:layout_constraintTop_toBottomOf="@id/date_cardView" />
 
         <Button
             android:id="@+id/game_button"
             style="@style/ThemeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_16"
+            android:layout_margin="@dimen/size_8"
             android:text="@string/join_game"
             android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/gameNumberOfPlayers_textView"
-            tools:visibility="visible" />
+            app:layout_constraintTop_toBottomOf="@id/date_cardView" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

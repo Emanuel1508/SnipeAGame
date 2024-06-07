@@ -29,10 +29,10 @@ class AllGamesAdapter(private val gameClickListener: GameClickListener) :
     override fun getItemCount() = allGames.size
 
     class ViewHolder(binding: ItemGameBinding) : RecyclerView.ViewHolder(binding.root) {
-        val dateTextView = binding.gameDateTextView
-        val timeTextView = binding.gameTimeTextView
-        val locationTextView = binding.gameLocationTextView
-        val numberOfPlayersTextView = binding.gameNumberOfPlayersTextView
+        val dateTextView = binding.dateTextView
+        val timeTextView = binding.timeTextView
+        val locationTextView = binding.locationTextView
+        val numberOfPlayersTextView = binding.playersTextView
         val button = binding.gameButton
     }
 
@@ -40,11 +40,11 @@ class AllGamesAdapter(private val gameClickListener: GameClickListener) :
     private fun setViews(holder: ViewHolder, game: GameParameters) {
         holder.apply {
             game.apply {
-                dateTextView.text = StringConstants.GAME_DATE + date
-                timeTextView.text = StringConstants.GAME_TIME + time
-                locationTextView.text = StringConstants.GAME_LOCATION + location
+                dateTextView.text = date
+                timeTextView.text = time
+                locationTextView.text = location
                 numberOfPlayersTextView.text =
-                    "${StringConstants.PLAYERS}$currentPlayers/$numberOfPlayers"
+                    "$currentPlayers/$numberOfPlayers"
                 if (currentPlayers == numberOfPlayers.toInt()) {
                     button.text = StringConstants.MAX_ROOM
                     button.disable()

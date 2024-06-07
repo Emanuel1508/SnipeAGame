@@ -31,7 +31,7 @@
             android:background="@color/light_gray"
             app:cardCornerRadius="@dimen/size_24"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/middle_guideline"
+            app:layout_constraintEnd_toEndOf="@id/first_guideline"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/gameComplete_textView">
 
@@ -60,7 +60,7 @@
             app:cardCornerRadius="@dimen/size_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/middle_guideline"
+            app:layout_constraintStart_toStartOf="@id/first_guideline"
             app:layout_constraintTop_toBottomOf="@id/gameComplete_textView">
 
             <LinearLayout
@@ -68,20 +68,20 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/date_textView"
-                style="@style/HintText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/size_8"
-                app:drawableTopCompat="@drawable/calendar"
-                tools:text="Date" />
+                <TextView
+                    android:id="@+id/date_textView"
+                    style="@style/HintText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/size_8"
+                    app:drawableTopCompat="@drawable/calendar"
+                    tools:text="Date" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/middle_guideline"
+            android:id="@+id/first_guideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"

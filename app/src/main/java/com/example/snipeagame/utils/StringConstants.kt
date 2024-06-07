@@ -12,8 +12,6 @@ class StringConstants {
         const val IMMORTALS = "Immortals"
         const val GAME_DATE = "Game Date: "
         const val GAME_TIME = "Game Time: "
-        const val GAME_LOCATION = "Game Location: "
-        const val PLAYERS = "Players: "
         const val MAX_ROOM = "LIMIT REACHED"
         const val MARKSMAN = "Marksman"
         const val MACHINE_GUNNER = "Machine Gunner"
@@ -24,6 +22,5 @@ class StringConstants {
         const val FINISH_GAME = "Finish Game"
         const val TAKEDOWN = "takedown"
         const val GAME = "game"
-        const val IS_CHECKED = "is_checked"
     }
 }

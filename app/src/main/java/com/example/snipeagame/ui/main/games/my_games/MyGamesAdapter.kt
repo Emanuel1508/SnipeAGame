@@ -11,7 +11,7 @@ import com.example.snipeagame.utils.StringConstants
 import com.example.snipeagame.utils.convertDate
 import com.example.snipeagame.utils.disable
 import com.example.snipeagame.utils.enable
-import com.example.snipeagame.utils.hide
+import com.example.snipeagame.utils.gone
 import com.example.snipeagame.utils.show
 import java.util.Calendar
 
@@ -37,18 +37,20 @@ class MyGamesAdapter(private val myGameClickListener: MyGameClickListener) :
     fun setViews(holder: ViewHolder, game: GameParameters) {
         holder.apply {
             game.apply {
-                dateTextView.text = StringConstants.GAME_DATE + date
-                timeTextView.text = StringConstants.GAME_TIME + time
-                locationTextView.text = StringConstants.GAME_LOCATION + location
+                dateTextView.text = date
+                timeTextView.text = time
+                locationTextView.text = location
                 numberOfPlayersTextView.text =
-                    "${StringConstants.PLAYERS}$currentPlayers/$numberOfPlayers"
+                    "$currentPlayers/$numberOfPlayers"
 
                 if (verifyDate(game)) {
                     button.text = StringConstants.FINISH_GAME
                     button.show()
                     button.enable()
+                    tapTextView.gone()
                 } else {
-                    button.hide()
+                    tapTextView.show()
+                    button.gone()
                     button.disable()
                 }
             }
@@ -82,10 +84,11 @@ class MyGamesAdapter(private val myGameClickListener: MyGameClickListener) :
     }
 
     class ViewHolder(binding: ItemGameBinding) : RecyclerView.ViewHolder(binding.root) {
-        val dateTextView = binding.gameDateTextView
-        val timeTextView = binding.gameTimeTextView
-        val locationTextView = binding.gameLocationTextView
-        val numberOfPlayersTextView = binding.gameNumberOfPlayersTextView
+        val dateTextView = binding.dateTextView
+        val timeTextView = binding.timeTextView
+        val locationTextView = binding.locationTextView
+        val numberOfPlayersTextView = binding.playersTextView
+        val tapTextView = binding.tapTextView
         val button = binding.gameButton
     }
 
